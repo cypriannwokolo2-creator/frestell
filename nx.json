@@ -14,23 +14,11 @@
     "sharedGlobals": ["{workspaceRoot}/tsconfig.base.json", "{workspaceRoot}/.eslintrc.json"]
   },
   "targetDefaults": {
-    "build": {
-      "cache": true,
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
-    },
-    "test": {
-      "cache": true,
-      "inputs": ["default", "^production"]
-    },
-    "lint": {
-      "cache": true,
-      "inputs": ["default"]
-    }
+    "build": { "cache": true, "dependsOn": ["^build"], "inputs": ["production", "^production"] },
+    "test": { "cache": true, "inputs": ["default", "^production"] },
+    "lint": { "cache": true, "inputs": ["default"] }
   },
   "defaultBase": "main",
-  "workspaceLayout": {
-    "apps": "apps",
-    "libs": "libs"
-  }
+  "workspaceLayout": { "apps": "apps", "libs": "libs" },
+  "nxCloudAccessToken": "ZWUxMGI5YmUtMWQ3OC00ZmI0LWExODktZjhkMWY2MzY0MjVhfHJlYWQtd3JpdGU="
 }
