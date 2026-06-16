@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreStell · Full Structure Index</title>
+    <style>
+        body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f7fbfc; color:#0b1220; margin:0; }
+        .wrap { max-width:1100px; margin:24px auto; padding:16px; }
+        .card { background:#fff; border:1px solid #e6eef0; border-radius:10px; padding:16px; box-shadow:0 6px 20px rgba(11,18,32,0.04); }
+        h1 { margin:0 0 12px 0; font-size:20px }
+        ul { list-style:none; padding:0; margin:8px 0 0 0; display:flex; flex-direction:column; gap:8px }
+        a.link { display:inline-block; padding:10px 12px; border-radius:8px; background:#f0feff; color:#04656a; text-decoration:none; font-weight:600 }
+        .desc { color:#5b6b72; font-size:13px }
+        .row { display:flex; gap:12px; flex-wrap:wrap }
+        header { background:#071023;color:#cfeaf8;padding:12px 0 }
+        header .inner { max-width:1100px;margin:0 auto;padding:0 16px }
+    </style>
+</head>
+<body>
+<header>
+  <div class="inner">
+    <strong>FreStell — Full Structure Index</strong>
+  </div>
+</header>
+<div class="wrap">
+  <div class="card">
+    <h1>Navigate your planning files</h1>
+    <p class="desc">This index links to each HTML planning file in the workspace. Use these to view or edit the proposed folder/file shapes.</p>
+    <ul>
+      <li class="row"><a class="link" href="goals.html">Goals (goals.html)</a><span class="desc"> — Phase 1 goals & roadmap</span></li>
+      <li class="row"><a class="link" href="apps.html">Apps (apps.html)</a><span class="desc"> — web + api</span></li>
+      <li class="row"><a class="link" href="packages.html">Packages (packages.html)</a><span class="desc"> — shared types, dtos, validators</span></li>
+      <li class="row"><a class="link" href="services.html">Services (services.html)</a><span class="desc"> — extractable microservices</span></li>
+      <li class="row"><a class="link" href="contracts.html">Contracts (contracts.html)</a><span class="desc"> — Soroban / Rust contracts</span></li>
+      <li class="row"><a class="link" href="infrastructure.html">Infrastructure (infrastructure.html)</a><span class="desc"> — Docker, Terraform, monitoring</span></li>
+      <li class="row"><a class="link" href="root.html">Root (root.html)</a><span class="desc"> — CI, workspace config, tooling</span></li>
+    </ul>
+    <hr style="margin:14px 0;border:none;border-top:1px solid #eef7f8" />
+    <p class="desc">Notes: these files are navigation helpers for planning only — they don't change your actual repo layout. When you're ready I can rename or generate files to match this plan.</p>
+  </div>
+</div>
+</body>
+</html>

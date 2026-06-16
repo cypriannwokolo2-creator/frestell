@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FreStell · Apps (web & api)</title>
+  <style>body{font-family:system-ui,Segoe UI,Roboto,Inter,Arial;margin:0;background:#f7fbfc;color:#0b1220} .nav{background:#fff;border-bottom:1px solid #eee;padding:8px} .nav a{color:#04656a;margin-right:12px;text-decoration:none;font-weight:600} .wrap{max-width:1100px;margin:24px auto;padding:16px} pre{background:#fff;border:1px solid #e6eef0;padding:12px;overflow:auto}</style>
+</head>
+<body>
+  <div class="nav"><div class="wrap"><a href="full-structure.html">Full Structure</a><a href="goals.html">Goals</a><a href="apps.html">Apps</a><a href="packages.html">Packages</a><a href="services.html">Services</a><a href="contracts.html">Contracts</a><a href="infrastructure.html">Infrastructure</a><a href="root.html">Root</a></div></div>
+  <div class="wrap">
+    <h1>Apps — Frontend (Next.js) & Backend (NestJS)</h1>
+    
+    <h2>apps/web — Next.js · React · TypeScript Frontend</h2>
+    <pre>
+apps/web/
+  public/
+    favicon.ico, robots.txt, manifest.json, sitemap.xml
+    assets/
+      images/ → logo.svg, logo-white.svg, og-image.png, placeholder.jpg, hero-bg.webp
+      fonts/ → inter.woff2, jetbrains-mono.woff2
+  
+  src/
+    pages/
+      _app.tsx, _document.tsx, _error.tsx, index.tsx, 404.tsx, 500.tsx
+      login.tsx, signup.tsx, forgot-password.tsx, reset-password.tsx
+      dashboard.tsx, notifications.tsx, messages.tsx
+      settings/ → index.tsx, profile.tsx, security.tsx, notifications.tsx, billing.tsx, sessions.tsx, integrations.tsx
+      profile/ → index.tsx, [username].tsx, edit.tsx
+      wallet/ → index.tsx, deposit.tsx, withdraw.tsx, transactions.tsx, escrow.tsx
+      jobs/ → index.tsx, [id].tsx, new.tsx, edit/[id].tsx, [id]/proposals.tsx, [id]/applications.tsx
+      freelancer/ → index.tsx, [slug].tsx
+      proposals/ → index.tsx, [id].tsx, [id]/edit.tsx
+      contracts/ → index.tsx, [id].tsx, [id]/milestones.tsx, [id]/files.tsx, [id]/amendments.tsx
+      workspace/ → [contractId].tsx, [contractId]/files.tsx, [contractId]/activity.tsx
+      disputes/ → index.tsx, [id].tsx, new.tsx
+      reviews/ → write/[contractId].tsx, [id].tsx
+      verification/ → index.tsx, phone.tsx, id.tsx
+      admin/ → dashboard.tsx, users.tsx, user/[id].tsx, disputes.tsx, dispute/[id].tsx, verifications.tsx, reports.tsx, escrow.tsx, transactions.tsx, jobs.tsx, contracts.tsx, analytics.tsx, settings.tsx
+      api/ → auth/[...nextauth].ts, webhook/stellar.ts, upload.ts, ai/generate-proposal.ts
+    
+    components/
+      ui/ → Button, Input, Modal, Card, Badge, Avatar, AvatarGroup, Tabs, Tooltip, Skeleton, Toast, ToastContainer, Pagination, Dropdown, Checkbox, RadioGroup, Switch, Select, Textarea, Divider, Spinner, ProgressBar, Chip, Alert, Breadcrumb, Rating, FileUpload, CopyButton
+      layout/ → Header, Footer, Sidebar, MobileMenu, DashboardLayout, AuthLayout, AdminLayout, WorkspaceLayout, EmptyLayout, Navigation, BreadcrumbBar
+      jobs/ → JobCard, JobList, JobFilterBar, JobForm, JobDetail, AcceptanceCriteriaEditor, JobPreview, JobStats, SavedJobs
+      proposals/ → ProposalCard, ProposalList, ProposalForm, AIProposalCoach, AuthenticityBadge, ProposalComparison
+      profile/ → ProfileHeader, ProfileForm, PortfolioGrid, PortfolioItem, PortfolioUpload, SkillTags, SkillSelector, VerificationBadge, VerificationModal, CompletenessMeter, ReviewsList, ReviewCard, ReviewForm
+      contracts/ → ContractCard, ContractDetail, ContractTimeline, ContractActions, MilestoneList, AmendmentForm
+      disputes/ → DisputeCard, DisputeForm, DisputeDetail, EvidenceUpload, DisputeTimeline
+      chat/ → ChatWindow, MessageBubble, ChatInput
+      common/ → ErrorBoundary, Loading, NavBar
+    
+    hooks/ → useAuth, useUser, useJob, useProposal, useContract, useDispute, useChat, useNotification, useWallet, usePagination
+    utils/ → api-client.ts, auth-utils.ts, validators.ts, formatters.ts, date-utils.ts
+    styles/ → globals.css, variables.css, tailwind.css
+    context/ → AuthContext.tsx, UserContext.tsx, NotificationContext.tsx
+    config/ → api-endpoints.ts, constants.ts
+  
+  .env.local.example, next.config.js, tsconfig.json, package.json, jest.config.js
+    </pre>
+
+    <h2>apps/api — NestJS · Prisma · PostgreSQL · Redis · Stellar Backend</h2>
+    <pre>
+apps/api/
+  src/
+    main.ts, app.module.ts
+    
+    auth/ → JWT, WebAuthn, 2FA, OAuth
+      auth.module.ts, auth.controller.ts, auth.service.ts, auth.guard.ts
+      jwt.strategy.ts, jwt-refresh.strategy.ts, google.strategy.ts
+      passkey.service.ts, webauthn.controller.ts, two-factor.service.ts, two-factor.controller.ts
+      roles.guard.ts, roles.decorator.ts
+      dto/ → register.dto.ts, login.dto.ts, passkey-*.dto.ts, refresh.dto.ts, enable/verify-2fa.dto.ts, password.dto.ts
+      entities/ → user, session, passkey, refresh-token
+      tests: auth.service.spec.ts, auth.controller.spec.ts, passkey.service.spec.ts, two-factor.service.spec.ts
+    
+    users/ → Profiles, portfolios, skills, verification
+      users.module.ts, users.controller.ts, users.service.ts
+      dto/ → update-profile.dto.ts, freelancer-profile.dto.ts, client-profile.dto.ts, portfolio-item.dto.ts, skill.dto.ts
+      entities/ → profile, portfolio, skill
+      tests: users.service.spec.ts, users.controller.spec.ts
+    
+    jobs/ → Postings, filtering, categories, acceptance criteria
+      jobs.module.ts, jobs.controller.ts, jobs.service.ts
+      dto/ → create-job.dto.ts, update-job.dto.ts, job-filter.dto.ts, acceptance-criteria.dto.ts
+      entities/ → job, job-category, job-attachment
+      tests: jobs.service.spec.ts, jobs.controller.spec.ts
+    
+    proposals/ → Management, versioning, AI coaching
+      proposals.module.ts, proposals.controller.ts, proposals.service.ts
+      dto/ → create-proposal.dto.ts, update-proposal.dto.ts, ai-coach-request.dto.ts
+      entities/ → proposal, proposal-version
+      tests: proposals.service.spec.ts, proposals.controller.spec.ts
+    
+    contracts/ → Lifecycle, milestones, amendments
+      contracts.module.ts, contracts.controller.ts, contracts.service.ts
+      dto/ → create-contract.dto.ts, update-contract.dto.ts, amendment.dto.ts, milestone.dto.ts
+      entities/ → contract, milestone, amendment
+      tests: contracts.service.spec.ts, contracts.controller.spec.ts
+    
+    disputes/ → Resolution, evidence, appeals
+      disputes.module.ts, disputes.controller.ts, disputes.service.ts
+      dto/ → open-dispute.dto.ts, resolve-dispute.dto.ts, appeal.dto.ts
+      entities/ → dispute, dispute-evidence
+      tests: disputes.service.spec.ts, disputes.controller.spec.ts
+    
+    reviews/ → Feedback, ratings, responses
+      reviews.module.ts, reviews.controller.ts, reviews.service.ts
+      dto/ → create-review.dto.ts, reply-review.dto.ts, report-review.dto.ts
+      entities/ → review, review-reply
+      tests: reviews.service.spec.ts
+    
+    chat/ → WebSocket messaging, typing, presence
+      chat.module.ts, chat.gateway.ts, chat.service.ts, chat.controller.ts
+      dto/ → send-message.dto.ts, edit-message.dto.ts, typing.dto.ts
+      entities/ → message, conversation
+      tests: chat.service.spec.ts, chat.gateway.spec.ts
+    
+    payments/ → Wallet, escrow, transactions
+      payments.module.ts, payments.controller.ts, payments.service.ts
+      dto/ → deposit.dto.ts, withdraw.dto.ts, transfer.dto.ts
+      entities/ → transaction, wallet
+      tests: payments.service.spec.ts
+    
+    blockchain/ → Stellar, Soroban, key encryption, anchor
+      blockchain.module.ts, stellar.service.ts, soroban.service.ts
+      transaction-monitor.service.ts, key-encryption.service.ts, anchor.service.ts
+      dto/ → create-account.dto.ts, submit-transaction.dto.ts
+      tests: stellar.service.spec.ts, soroban.service.spec.ts, key-encryption.service.spec.ts
+    
+    admin/ → User management, moderation, verification
+      admin.module.ts, admin.controller.ts, admin.service.ts
+      dto/ → ban-user.dto.ts, verify-user.dto.ts, moderate-job.dto.ts, resolve-dispute.dto.ts
+      tests: admin.service.spec.ts, admin.controller.spec.ts
+    
+    email/ → SendGrid, Mailgun, SES, SMTP + Handlebars templates
+      email.module.ts, email.service.ts, email.controller.ts
+      providers/ → sendgrid.provider.ts, mailgun.provider.ts, ses.provider.ts, smtp.provider.ts
+      templates/ → otp.hbs, welcome.hbs, password-reset.hbs, newsletter.hbs, notification.hbs, contract-approved.hbs, dispute-opened.hbs, payment-released.hbs, verification-approved.hbs, account-suspended.hbs
+      tests: email.service.spec.ts
+    
+    notifications/ → Real-time socket.io notifications
+      notifications.module.ts, notifications.service.ts, notifications.gateway.ts, notifications.controller.ts
+      dto/ → create-notification.dto.ts, mark-read.dto.ts
+      entities/ → notification
+      tests: notifications.service.spec.ts
+    
+    common/ → Shared: guards, pipes, filters, decorators, interfaces, middleware
+      decorators/ → current-user.decorator.ts, require-role.decorator.ts
+      filters/ → http-exception.filter.ts
+      interceptors/ → transform.interceptor.ts, logging.interceptor.ts
+      middleware/ → logger.middleware.ts
+      pipes/ → validation.pipe.ts
+      guards/ → auth.guard.ts, jwt.guard.ts
+      interfaces/ → user.interface.ts
+    
+    config/ → app-config.ts, database-config.ts, jwt-config.ts
+  
+  prisma/
+    schema.prisma (User, Session, Job, Proposal, Contract, Dispute, Review, Message, Transaction, Notification, etc.)
+    migrations/ → 0001_initial.sql, 0002_add_fields.sql, ...
+  
+  test/ → app.e2e-spec.ts, auth.e2e-spec.ts, jobs.e2e-spec.ts
+  
+  .env.example, nest-cli.json, tsconfig.json, tsconfig.build.json, package.json, Dockerfile
+    </pre>
+  </div>
+</body>
+</html>

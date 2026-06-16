@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FreStell · Packages (shared)</title>
+  <style>body{font-family:system-ui,Segoe UI,Roboto,Inter,Arial;margin:0;background:#f7fbfc;color:#0b1220} .nav{background:#fff;border-bottom:1px solid #eee;padding:8px} .nav a{color:#04656a;margin-right:12px;text-decoration:none;font-weight:600} .wrap{max-width:1100px;margin:24px auto;padding:16px} pre{background:#fff;border:1px solid #e6eef0;padding:12px;overflow:auto}</style>
+</head>
+<body>
+  <div class="nav"><div class="wrap"><a href="full-structure.html">Full Structure</a><a href="goals.html">Goals</a><a href="apps.html">Apps</a><a href="packages.html">Packages</a><a href="services.html">Services</a><a href="contracts.html">Contracts</a><a href="infrastructure.html">Infrastructure</a><a href="root.html">Root</a></div></div>
+  <div class="wrap">
+    <h1>Packages — Shared Types, DTOs, Validators, Utilities</h1>
+    <p>Keep DTOs, Zod schemas, Prisma client, and shared types here to avoid duplication between apps and services.</p>
+    <pre>
+packages/
+  shared/
+    package.json, tsconfig.json, index.ts
+    
+    src/
+      index.ts
+      
+      types/ — TypeScript types for all domains
+        index.ts
+        user.types.ts, auth.types.ts, job.types.ts, proposal.types.ts
+        contract.types.ts, dispute.types.ts, chat.types.ts, payment.types.ts
+        stellar.types.ts, review.types.ts, notification.types.ts, admin.types.ts
+        common.types.ts, api.types.ts
+      
+      validators/ — Zod schemas for runtime validation
+        index.ts
+        zod-schemas.ts (exports all schemas for easy importing)
+        auth.schema.ts, job.schema.ts, proposal.schema.ts
+        contract.schema.ts, user.schema.ts, payment.schema.ts
+        stellar.schema.ts, common.schema.ts
+      
+      dtos/ — Data transfer objects (for API contracts)
+        index.ts
+        auth.dto.ts, user.dto.ts, job.dto.ts, proposal.dto.ts
+        contract.dto.ts, dispute.dto.ts, chat.dto.ts, payment.dto.ts
+        review.dto.ts, admin.dto.ts, notification.dto.ts, search.dto.ts
+      
+      utils/ — Shared utility functions
+        index.ts, helpers.ts, formatters.ts, validators.ts
+        constants.ts, errors.ts, stellar-helpers.ts
+        date-utils.ts, string-utils.ts, number-utils.ts
+      
+      enums/ — Shared enumerations
+        index.ts
+        user-role.enum.ts, job-status.enum.ts, proposal-status.enum.ts
+        contract-status.enum.ts, dispute-status.enum.ts, verification-tier.enum.ts
+        payment-status.enum.ts, notification-type.enum.ts
+      
+      interfaces/ — Shared TypeScript interfaces
+        index.ts, paginated-response.interface.ts, api-response.interface.ts
+        stellar-transaction.interface.ts, socket-event.interface.ts
+      utils/
+    package.json
+    tsconfig.json
+  ui/
+  analytics/
+    </pre>
+    <p>Recommendation: place `prisma/schema.prisma` here or at repo root (`prisma/`) if multiple projects consume the generated client. Always import DTOs from `packages/shared` in backend and frontend.</p>
+  </div>
+</body>
+</html>

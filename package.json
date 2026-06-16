@@ -1,0 +1,42 @@
+{
+  "name": "frestell",
+  "version": "0.1.0",
+  "description": "FreStell: Trustless freelance marketplace on Stellar + Soroban",
+  "private": true,
+  "scripts": {
+    "install:root": "npm install --legacy-peer-deps",
+    "install:all": "npm install --legacy-peer-deps && cd apps/web && npm install --legacy-peer-deps && cd ../api && npm install --legacy-peer-deps && cd ../../packages/shared && npm install --legacy-peer-deps",
+    "prepare": "husky",
+    "dev:web": "npm --prefix apps/web run dev",
+    "dev:api": "npm --prefix apps/api run dev",
+    "dev": "concurrently -k -n web,api -c blue,magenta \"npm run dev:web\" \"npm run dev:api\"",
+    "build": "nx run-many --target=build --all",
+    "test": "nx run-many --target=test --all",
+    "test:integration": "nx run api:test:integration",
+    "lint": "nx run-many --target=lint --all",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
+    "infra:up": "docker compose up -d",
+    "infra:down": "docker compose down",
+    "infra:logs": "docker compose logs -f",
+    "prisma:generate": "npm --prefix apps/api run prisma:generate",
+    "prisma:migrate": "npm --prefix apps/api run prisma:migrate",
+    "prisma:studio": "npm --prefix apps/api run prisma:studio"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^18.0.0",
+    "@commitlint/config-conventional": "^18.0.0",
+    "@nx/eslint": "^18.0.0",
+    "@nx/jest": "^18.0.0",
+    "@nx/js": "^18.0.0",
+    "@nx/nest": "^18.0.0",
+    "@nx/next": "^18.0.0",
+    "@nx/node": "^18.0.0",
+    "concurrently": "^8.2.2",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.0.0",
+    "nx": "^18.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
+  }
+}

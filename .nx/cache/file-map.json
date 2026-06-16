@@ -1,0 +1,1590 @@
+{
+  "version": "6.0",
+  "nxVersion": "18.3.5",
+  "deps": {
+    "@commitlint/cli": "^18.0.0",
+    "@commitlint/config-conventional": "^18.0.0",
+    "@nx/eslint": "^18.0.0",
+    "@nx/jest": "^18.0.0",
+    "@nx/js": "^18.0.0",
+    "@nx/nest": "^18.0.0",
+    "@nx/next": "^18.0.0",
+    "@nx/node": "^18.0.0",
+    "concurrently": "^8.2.2",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.0.0",
+    "nx": "^18.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
+  },
+  "pathMappings": {
+    "@frestell/shared": ["packages/shared/src"],
+    "@frestell/shared/*": ["packages/shared/src/*"]
+  },
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "nonProjectFiles": [
+      {
+        "file": ".commitlintrc.json",
+        "hash": "9482616372236898778"
+      },
+      {
+        "file": ".dockerignore",
+        "hash": "14698785316537826661"
+      },
+      {
+        "file": ".env.example",
+        "hash": "2872322343363306073"
+      },
+      {
+        "file": ".eslintignore",
+        "hash": "15932269787866041818"
+      },
+      {
+        "file": ".eslintrc.json",
+        "hash": "9736275332266526009"
+      },
+      {
+        "file": ".github/workflows/ci.yml",
+        "hash": "12792043540247556582"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "3831000625699878418"
+      },
+      {
+        "file": ".husky/commit-msg",
+        "hash": "10480701491433114985"
+      },
+      {
+        "file": ".husky/pre-commit",
+        "hash": "13469207043343598078"
+      },
+      {
+        "file": ".nx/cache/d/server-process.json",
+        "hash": "12528115288383591535"
+      },
+      {
+        "file": ".prettierrc",
+        "hash": "16652982520527720897"
+      },
+      {
+        "file": "README.md",
+        "hash": "14436423536505764261"
+      },
+      {
+        "file": "docker-compose.yml",
+        "hash": "6598852326491938652"
+      },
+      {
+        "file": "docs/adr/0001-modular-monolith-to-services.md",
+        "hash": "13057393388368974888"
+      },
+      {
+        "file": "docs/adr/README.md",
+        "hash": "9746616633616352397"
+      },
+      {
+        "file": "frestell_plans/apps.html",
+        "hash": "10214613015351029905"
+      },
+      {
+        "file": "frestell_plans/contracts.html",
+        "hash": "896376072748301420"
+      },
+      {
+        "file": "frestell_plans/full-structure.html",
+        "hash": "1160896761007725356"
+      },
+      {
+        "file": "frestell_plans/goals.html",
+        "hash": "16541205444415597853"
+      },
+      {
+        "file": "frestell_plans/infrastructure.html",
+        "hash": "11951677306898087755"
+      },
+      {
+        "file": "frestell_plans/packages.html",
+        "hash": "12491171697260563791"
+      },
+      {
+        "file": "frestell_plans/root.html",
+        "hash": "782806198286040348"
+      },
+      {
+        "file": "frestell_plans/services.html",
+        "hash": "17975124010129822960"
+      },
+      {
+        "file": "jest.preset.js",
+        "hash": "3429130306414473014"
+      },
+      {
+        "file": "lint-staged.config.js",
+        "hash": "3094956176732680004"
+      },
+      {
+        "file": "nx.json",
+        "hash": "7702951599807739604"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "8129836194083379027"
+      },
+      {
+        "file": "package.json",
+        "hash": "14887938375578332231"
+      },
+      {
+        "file": "services/ai/package-lock.json",
+        "hash": "8673460482334693561"
+      },
+      {
+        "file": "services/ai/package.json",
+        "hash": "5022200300797269538"
+      },
+      {
+        "file": "services/blockchain/package-lock.json",
+        "hash": "12468066203772616716"
+      },
+      {
+        "file": "services/blockchain/package.json",
+        "hash": "1522060922350640622"
+      },
+      {
+        "file": "services/chat/package-lock.json",
+        "hash": "15487327295058481891"
+      },
+      {
+        "file": "services/chat/package.json",
+        "hash": "15013628429535949120"
+      },
+      {
+        "file": "services/payments/package-lock.json",
+        "hash": "6351003229632961350"
+      },
+      {
+        "file": "services/payments/package.json",
+        "hash": "14455593514814106699"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "13812396181582483859"
+      },
+      {
+        "file": "tsconfig.json",
+        "hash": "13741519809983143327"
+      }
+    ],
+    "projectFileMap": {
+      "ai": [
+        {
+          "file": "libs/ai/jest.config.ts",
+          "hash": "12233992102738915239",
+          "deps": ["npm:jest"]
+        },
+        {
+          "file": "libs/ai/project.json",
+          "hash": "6520479972071646326"
+        },
+        {
+          "file": "libs/ai/src/index.ts",
+          "hash": "11195342414002458148"
+        },
+        {
+          "file": "libs/ai/src/lib/ai.module.ts",
+          "hash": "4474820636936526082",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "libs/ai/src/lib/ai.service.ts",
+          "hash": "5630384157740504644",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "libs/ai/src/lib/ai.types.ts",
+          "hash": "5885027377598300501"
+        },
+        {
+          "file": "libs/ai/tsconfig.json",
+          "hash": "15673756882322724375"
+        },
+        {
+          "file": "libs/ai/tsconfig.lib.json",
+          "hash": "1162684258940112904"
+        },
+        {
+          "file": "libs/ai/tsconfig.spec.json",
+          "hash": "12674571080773351691"
+        }
+      ],
+      "jobs": [
+        {
+          "file": "libs/jobs/jest.config.ts",
+          "hash": "16059334720067515258",
+          "deps": ["npm:jest"]
+        },
+        {
+          "file": "libs/jobs/project.json",
+          "hash": "5715684015875123396"
+        },
+        {
+          "file": "libs/jobs/src/index.ts",
+          "hash": "11416662987130817997"
+        },
+        {
+          "file": "libs/jobs/src/lib/jobs.module.ts",
+          "hash": "9306451233065162386",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "libs/jobs/src/lib/jobs.service.ts",
+          "hash": "4025907115738206043",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "libs/jobs/src/lib/jobs.types.ts",
+          "hash": "9698141921140644957"
+        },
+        {
+          "file": "libs/jobs/tsconfig.json",
+          "hash": "15673756882322724375"
+        },
+        {
+          "file": "libs/jobs/tsconfig.lib.json",
+          "hash": "18155349116525859334"
+        },
+        {
+          "file": "libs/jobs/tsconfig.spec.json",
+          "hash": "12674571080773351691"
+        }
+      ],
+      "auth": [
+        {
+          "file": "libs/auth/jest.config.ts",
+          "hash": "5001723886966084175",
+          "deps": ["npm:jest"]
+        },
+        {
+          "file": "libs/auth/project.json",
+          "hash": "13388363535684789590"
+        },
+        {
+          "file": "libs/auth/src/index.ts",
+          "hash": "13312917541836729691"
+        },
+        {
+          "file": "libs/auth/src/lib/auth.module.ts",
+          "hash": "16651333949353318293",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "libs/auth/src/lib/auth.service.ts",
+          "hash": "1159699965960715571",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "libs/auth/src/lib/auth.types.ts",
+          "hash": "10228514659492494845"
+        },
+        {
+          "file": "libs/auth/tsconfig.json",
+          "hash": "11428179034852020039"
+        },
+        {
+          "file": "libs/auth/tsconfig.lib.json",
+          "hash": "18155349116525859334"
+        },
+        {
+          "file": "libs/auth/tsconfig.spec.json",
+          "hash": "12674571080773351691"
+        }
+      ],
+      "payments": [
+        {
+          "file": "libs/payments/jest.config.ts",
+          "hash": "12957111335906920515",
+          "deps": ["npm:jest"]
+        },
+        {
+          "file": "libs/payments/project.json",
+          "hash": "6433298670359801954"
+        },
+        {
+          "file": "libs/payments/src/index.ts",
+          "hash": "9367369915326770546"
+        },
+        {
+          "file": "libs/payments/src/lib/payments.module.ts",
+          "hash": "1229489184974731344",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "libs/payments/src/lib/payments.service.ts",
+          "hash": "1858161622510495347",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "libs/payments/src/lib/payments.types.ts",
+          "hash": "1316907130825560340"
+        },
+        {
+          "file": "libs/payments/tsconfig.json",
+          "hash": "15673756882322724375"
+        },
+        {
+          "file": "libs/payments/tsconfig.lib.json",
+          "hash": "1162684258940112904"
+        },
+        {
+          "file": "libs/payments/tsconfig.spec.json",
+          "hash": "12674571080773351691"
+        }
+      ],
+      "api": [
+        {
+          "file": "apps/api/jest.config.ts",
+          "hash": "2675470333670900116",
+          "deps": ["npm:jest"]
+        },
+        {
+          "file": "apps/api/nest-cli.json",
+          "hash": "13307271297959588970"
+        },
+        {
+          "file": "apps/api/package-lock.json",
+          "hash": "7574729163774294021"
+        },
+        {
+          "file": "apps/api/package.json",
+          "hash": "16249220646384086299",
+          "deps": [
+            "npm:axios",
+            "npm:compression",
+            "npm:dotenv",
+            "npm:rxjs",
+            "npm:@nestjs/schematics",
+            "npm:@nx/eslint",
+            "npm:@nx/jest",
+            "npm:@nx/nest",
+            "npm:@nx/node",
+            "npm:@types/express",
+            "npm:@types/node",
+            "npm:eslint",
+            "npm:ts-loader",
+            "npm:ts-node",
+            "npm:tsconfig-paths",
+            "npm:typescript"
+          ]
+        },
+        {
+          "file": "apps/api/prisma/migrations/20260607114015_init/migration.sql",
+          "hash": "12714828081104192624"
+        },
+        {
+          "file": "apps/api/prisma/migrations/20260607161859_fix_auth/migration.sql",
+          "hash": "7245061234921054952"
+        },
+        {
+          "file": "apps/api/prisma/migrations/20260613100000_add_budget_type/migration.sql",
+          "hash": "17112637071502493932"
+        },
+        {
+          "file": "apps/api/prisma/migrations/20260613120000_job_features/migration.sql",
+          "hash": "15621601692594657481"
+        },
+        {
+          "file": "apps/api/prisma/migrations/20260613130000_job_attachments/migration.sql",
+          "hash": "16621456699714360637"
+        },
+        {
+          "file": "apps/api/prisma/migrations/migration_lock.toml",
+          "hash": "11493296588214560035"
+        },
+        {
+          "file": "apps/api/prisma/schema.prisma",
+          "hash": "4764864974377123479"
+        },
+        {
+          "file": "apps/api/project.json",
+          "hash": "10374747984915352631"
+        },
+        {
+          "file": "apps/api/src/app.module.ts",
+          "hash": "7054930639352700305",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/core",
+            "npm:nestjs-pino",
+            "npm:@nestjs/throttler"
+          ]
+        },
+        {
+          "file": "apps/api/src/audit/audit.module.ts",
+          "hash": "11103413669072397449",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/src/audit/audit.service.ts",
+          "hash": "17884677960856920022",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/src/auth/auth.controller.ts",
+          "hash": "11013936603985871090",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/passport",
+            "npm:@nestjs/swagger",
+            "npm:express",
+            ["npm:@nestjs/common", "dynamic"]
+          ]
+        },
+        {
+          "file": "apps/api/src/auth/auth.module.ts",
+          "hash": "757589611715872001",
+          "deps": ["npm:@nestjs/common", "npm:@nestjs/jwt", "npm:@nestjs/passport"]
+        },
+        {
+          "file": "apps/api/src/auth/auth.service.ts",
+          "hash": "9731574166100781443",
+          "deps": ["npm:@nestjs/common", "npm:@nestjs/jwt", "npm:argon2", "npm:crypto"]
+        },
+        {
+          "file": "apps/api/src/auth/challenge-store.ts",
+          "hash": "12326817139285884748",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/src/auth/cookie.service.ts",
+          "hash": "7986291905191462255",
+          "deps": ["npm:@nestjs/common", "npm:express"]
+        },
+        {
+          "file": "apps/api/src/auth/decorators/current-user.decorator.ts",
+          "hash": "3368660013373656575",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/src/auth/decorators/roles.decorator.ts",
+          "hash": "11745620449776234641",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/src/auth/dto/auth.dto.ts",
+          "hash": "12276645835904360668",
+          "deps": ["npm:zod"]
+        },
+        {
+          "file": "apps/api/src/auth/dto/passkey.dto.ts",
+          "hash": "8272796784100695638",
+          "deps": ["npm:zod"]
+        },
+        {
+          "file": "apps/api/src/auth/entities/session.entity.ts",
+          "hash": "4927249151081430265"
+        },
+        {
+          "file": "apps/api/src/auth/entities/user.entity.ts",
+          "hash": "2402995868350006559"
+        },
+        {
+          "file": "apps/api/src/auth/guards/auth.guard.ts",
+          "hash": "3506380197493276361",
+          "deps": ["npm:@nestjs/common", "npm:@nestjs/passport"]
+        },
+        {
+          "file": "apps/api/src/auth/guards/google-auth.guard.ts",
+          "hash": "16620601939205503141",
+          "deps": ["npm:@nestjs/common", "npm:@nestjs/passport"]
+        },
+        {
+          "file": "apps/api/src/auth/guards/roles.guard.ts",
+          "hash": "4820773421525671633",
+          "deps": ["npm:@nestjs/common", "npm:@nestjs/core"]
+        },
+        {
+          "file": "apps/api/src/auth/jwt-refresh.strategy.ts",
+          "hash": "9010450515678391532",
+          "deps": ["npm:@nestjs/common", "npm:@nestjs/passport", "npm:passport-jwt", "npm:express"]
+        },
+        {
+          "file": "apps/api/src/auth/jwt.strategy.ts",
+          "hash": "4205979919051667526",
+          "deps": ["npm:@nestjs/common", "npm:@nestjs/passport", "npm:passport-jwt"]
+        },
+        {
+          "file": "apps/api/src/auth/link-token-store.ts",
+          "hash": "14105468259151938307",
+          "deps": ["npm:@nestjs/common", "npm:crypto"]
+        },
+        {
+          "file": "apps/api/src/auth/login-rate-limit.service.ts",
+          "hash": "964180593670129574",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/src/auth/middleware/csrf.middleware.ts",
+          "hash": "15293125531589914464",
+          "deps": ["npm:@nestjs/common", "npm:express", "npm:crypto"]
+        },
+        {
+          "file": "apps/api/src/auth/passkey.service.ts",
+          "hash": "1045628223121766221",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:crypto",
+            "npm:@simplewebauthn/server",
+            "npm:@simplewebauthn/types"
+          ]
+        },
+        {
+          "file": "apps/api/src/auth/restore-otp-store.ts",
+          "hash": "17720095783237726009",
+          "deps": ["npm:@nestjs/common", "npm:crypto"]
+        },
+        {
+          "file": "apps/api/src/auth/strategies/google-oauth.strategy.ts",
+          "hash": "5039548955925104675",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/passport",
+            "npm:passport-google-oauth20",
+            "npm:express"
+          ]
+        },
+        {
+          "file": "apps/api/src/auth/tests/auth.controller.spec.ts",
+          "hash": "7306022760955748946",
+          "deps": ["npm:@nestjs/testing", "npm:@nestjs/common", "npm:supertest", "npm:nestjs-pino"]
+        },
+        {
+          "file": "apps/api/src/auth/tests/auth.service.spec.ts",
+          "hash": "15566464729339136688",
+          "deps": ["npm:@nestjs/testing", "npm:@nestjs/common", "npm:@nestjs/jwt", "npm:argon2"]
+        },
+        {
+          "file": "apps/api/src/common/errors/app-error.ts",
+          "hash": "9989810247173954738",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/src/common/filters/all-exceptions.filter.ts",
+          "hash": "16057409925458771841",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:express",
+            "npm:zod",
+            "npm:@prisma/client/runtime/library",
+            "shared"
+          ]
+        },
+        {
+          "file": "apps/api/src/common/interceptors/request-id.interceptor.ts",
+          "hash": "10749629605963780662",
+          "deps": ["npm:crypto", "npm:@nestjs/common", "npm:rxjs", "npm:express", "npm:nestjs-pino"]
+        },
+        {
+          "file": "apps/api/src/common/logging/logger.config.ts",
+          "hash": "6551684162861862736",
+          "deps": ["npm:nestjs-pino", "npm:crypto", "npm:http"]
+        },
+        {
+          "file": "apps/api/src/config/env.ts",
+          "hash": "9326446627869180992",
+          "deps": ["npm:dotenv", "npm:zod", "npm:path", "npm:fs"]
+        },
+        {
+          "file": "apps/api/src/email/email-template.ts",
+          "hash": "1906675451672303288"
+        },
+        {
+          "file": "apps/api/src/email/email.module.ts",
+          "hash": "10689786563802543851",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/src/email/email.service.ts",
+          "hash": "11821542154828656702",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/src/health/health.controller.ts",
+          "hash": "12174976254989396916",
+          "deps": ["npm:@nestjs/common", "npm:@nestjs/swagger"]
+        },
+        {
+          "file": "apps/api/src/health/health.module.ts",
+          "hash": "17647413844835099057",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/src/health/liveness.controller.ts",
+          "hash": "3271775190817567255",
+          "deps": ["npm:@nestjs/common", "npm:@nestjs/swagger"]
+        },
+        {
+          "file": "apps/api/src/health/readiness.controller.ts",
+          "hash": "16662044529810672437",
+          "deps": ["npm:@nestjs/common", "npm:@nestjs/swagger"]
+        },
+        {
+          "file": "apps/api/src/jobs/dto/jobs.dto.ts",
+          "hash": "14398094384228274660",
+          "deps": ["npm:zod"]
+        },
+        {
+          "file": "apps/api/src/jobs/jobs.controller.ts",
+          "hash": "6816348877686099742",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:express",
+            "npm:@nestjs/platform-express",
+            "npm:multer",
+            "npm:@nestjs/swagger"
+          ]
+        },
+        {
+          "file": "apps/api/src/jobs/jobs.module.ts",
+          "hash": "4241906432769589397",
+          "deps": ["npm:@nestjs/common", "npm:@nestjs/schedule"]
+        },
+        {
+          "file": "apps/api/src/jobs/jobs.service.ts",
+          "hash": "472287306814850492",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/schedule",
+            "npm:fs",
+            "npm:path",
+            "npm:crypto",
+            ["npm:fs", "dynamic"]
+          ]
+        },
+        {
+          "file": "apps/api/src/main.ts",
+          "hash": "7045068292983225427",
+          "deps": [
+            "npm:reflect-metadata",
+            "npm:@nestjs/core",
+            "npm:@nestjs/common",
+            "npm:nestjs-pino",
+            "npm:helmet",
+            "npm:compression",
+            "npm:cookie-parser"
+          ]
+        },
+        {
+          "file": "apps/api/src/password-reset/password-reset.module.ts",
+          "hash": "5142486109592232620",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/src/password-reset/password-reset.service.ts",
+          "hash": "3463542947124643883",
+          "deps": ["npm:@nestjs/common", "npm:crypto", ["npm:argon2", "dynamic"]]
+        },
+        {
+          "file": "apps/api/src/prisma/prisma.module.ts",
+          "hash": "11716004293173238981",
+          "deps": ["npm:@nestjs/common", "npm:@prisma/client"]
+        },
+        {
+          "file": "apps/api/src/profile/dto/profile.dto.ts",
+          "hash": "14368666956931238326",
+          "deps": ["npm:zod"]
+        },
+        {
+          "file": "apps/api/src/profile/profile.controller.ts",
+          "hash": "9520162738895874153",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/platform-express",
+            "npm:multer",
+            "npm:path",
+            "npm:crypto",
+            "npm:@nestjs/swagger"
+          ]
+        },
+        {
+          "file": "apps/api/src/profile/profile.module.ts",
+          "hash": "9612271793013118802",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/src/profile/profile.service.ts",
+          "hash": "8665884314552316396",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/src/profile/skills.data.ts",
+          "hash": "10790425228201754424"
+        },
+        {
+          "file": "apps/api/src/profile/slug.utils.ts",
+          "hash": "10886703968743550605"
+        },
+        {
+          "file": "apps/api/src/recovery/recovery-codes.service.ts",
+          "hash": "12647003362474902337",
+          "deps": ["npm:@nestjs/common", "npm:crypto"]
+        },
+        {
+          "file": "apps/api/src/recovery/recovery.module.ts",
+          "hash": "13882710925733055687",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/src/swagger/swagger.config.ts",
+          "hash": "6680204414208772607",
+          "deps": ["npm:@nestjs/swagger", "npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/src/throttler/throttler.module.ts",
+          "hash": "6785056140858202055",
+          "deps": ["npm:@nestjs/common", "npm:@nestjs/throttler", "npm:@nestjs/core"]
+        },
+        {
+          "file": "apps/api/src/twofactor/two-factor-otp-store.ts",
+          "hash": "3871655352563478201",
+          "deps": ["npm:@nestjs/common", "npm:crypto"]
+        },
+        {
+          "file": "apps/api/src/twofactor/twofactor.module.ts",
+          "hash": "7984919019527925296",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/src/twofactor/twofactor.service.ts",
+          "hash": "2184067518197692728",
+          "deps": ["npm:@nestjs/common", ["npm:speakeasy", "dynamic"], ["npm:qrcode", "dynamic"]]
+        },
+        {
+          "file": "apps/api/test/integration/health.e2e-spec.ts",
+          "hash": "6372408601945451760",
+          "deps": ["npm:supertest", "npm:@nestjs/common"]
+        },
+        {
+          "file": "apps/api/test/integration/setup.ts",
+          "hash": "8144380188907233059",
+          "deps": [
+            "npm:@nestjs/testing",
+            "npm:@nestjs/common",
+            "npm:nestjs-pino",
+            "npm:helmet",
+            "npm:compression",
+            "npm:@testcontainers/postgresql",
+            "npm:child_process"
+          ]
+        },
+        {
+          "file": "apps/api/tsconfig.app.json",
+          "hash": "8519507667299194114"
+        },
+        {
+          "file": "apps/api/tsconfig.json",
+          "hash": "1336238863338286998"
+        },
+        {
+          "file": "apps/api/tsconfig.spec.json",
+          "hash": "16710274341708719637"
+        },
+        {
+          "file": "apps/api/tsconfig.tsbuildinfo",
+          "hash": "2210562673703540260"
+        }
+      ],
+      "web": [
+        {
+          "file": "apps/web/.env.local.example",
+          "hash": "5578680574798506843"
+        },
+        {
+          "file": "apps/web/Dockerfile",
+          "hash": "18104483791523565173"
+        },
+        {
+          "file": "apps/web/next-env.d.ts",
+          "hash": "10054213917412045845"
+        },
+        {
+          "file": "apps/web/next.config.js",
+          "hash": "17031478173821439250"
+        },
+        {
+          "file": "apps/web/package-lock.json",
+          "hash": "14362939901585201132"
+        },
+        {
+          "file": "apps/web/package.json",
+          "hash": "16593733631254190520",
+          "deps": [
+            "npm:axios",
+            "npm:@nx/eslint",
+            "npm:@nx/jest",
+            "npm:@nx/next",
+            "npm:@types/node",
+            "npm:autoprefixer",
+            "npm:postcss",
+            "npm:typescript"
+          ]
+        },
+        {
+          "file": "apps/web/postcss.config.js",
+          "hash": "8055263870272897227"
+        },
+        {
+          "file": "apps/web/project.json",
+          "hash": "14313045968079712757"
+        },
+        {
+          "file": "apps/web/src/app/(auth)/forgot-password/page.tsx",
+          "hash": "1150786068378401117",
+          "deps": [
+            "npm:@/components/auth/ForgotPasswordForm",
+            "npm:@/components/auth/AuthLayout",
+            "npm:@/components/auth/AuthGuard"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/(auth)/layout.tsx",
+          "hash": "11524721244684349260"
+        },
+        {
+          "file": "apps/web/src/app/(auth)/login/page.tsx",
+          "hash": "16244861699735500140",
+          "deps": [
+            "npm:@/components/auth/LoginForm",
+            "npm:@/components/auth/AuthLayout",
+            "npm:@/components/auth/AuthGuard"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/(auth)/reset-password/page.tsx",
+          "hash": "12950806058977443999",
+          "deps": [
+            "npm:@/components/auth/ResetPasswordForm",
+            "npm:@/components/auth/AuthLayout",
+            "npm:@/components/auth/AuthGuard"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/(auth)/restore-account/page.tsx",
+          "hash": "5762316727276749069",
+          "deps": [
+            "npm:react",
+            "npm:next/navigation",
+            "npm:next/link",
+            "npm:@/components/ui/Input",
+            "npm:@/components/ui/Button",
+            "npm:@/components/ui/Card",
+            "npm:@/components/ui/Toast",
+            "npm:@/components/auth/AuthLayout",
+            "npm:@/lib/api-client",
+            "npm:@/hooks/useOtpResend"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/(auth)/signup/page.tsx",
+          "hash": "16560136466387582383",
+          "deps": [
+            "npm:@/components/auth/SignupForm",
+            "npm:@/components/auth/AuthLayout",
+            "npm:@/components/auth/AuthGuard"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/(auth)/verify-email/page.tsx",
+          "hash": "2561191136714149932",
+          "deps": [
+            "npm:@/components/auth/VerifyEmailForm",
+            "npm:@/components/auth/AuthLayout",
+            "npm:@/components/auth/AuthGuard"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/auth/callback/content.tsx",
+          "hash": "15976601588832372174",
+          "deps": [
+            "npm:react",
+            "npm:next/navigation",
+            "npm:@/lib/api-client",
+            "npm:@/context/AuthProvider",
+            "npm:@/components/ui/Button"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/auth/callback/page.tsx",
+          "hash": "10083363729963687218",
+          "deps": ["npm:react", "npm:@/components/ui/Button"]
+        },
+        {
+          "file": "apps/web/src/app/dashboard/clients/jobs/[id]/analytics/page.tsx",
+          "hash": "646945621906882598",
+          "deps": [
+            "npm:@/components/ui/Card",
+            "npm:react",
+            "npm:next/navigation",
+            "npm:@/lib/api-client",
+            "npm:@/components/ui/Toast"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/dashboard/clients/jobs/[id]/page.tsx",
+          "hash": "12000503393397624023",
+          "deps": [
+            "npm:@/components/ui/Card",
+            "npm:@/components/ui/Button",
+            "npm:@/components/ui/Badge",
+            "npm:@/components/ui/Modal",
+            "npm:react",
+            "npm:next/navigation",
+            "npm:@/lib/api-client",
+            "npm:@/components/ui/Toast",
+            "npm:next/link"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/dashboard/clients/jobs/[id]/proposals/page.tsx",
+          "hash": "4835550426979201575",
+          "deps": [
+            "npm:@/components/ui/Card",
+            "npm:@/components/ui/Button",
+            "npm:@/components/ui/Badge",
+            "npm:react",
+            "npm:@/lib/api-client",
+            "npm:@/components/ui/Toast",
+            "npm:next/navigation"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/dashboard/clients/jobs/page.tsx",
+          "hash": "9131197889478472160",
+          "deps": [
+            "npm:@/components/ui/Card",
+            "npm:@/components/ui/Button",
+            "npm:@/components/ui/Badge",
+            "npm:@/components/ui/Modal",
+            "npm:react",
+            "npm:@/lib/api-client",
+            "npm:@/components/ui/Toast",
+            "npm:next/link",
+            "npm:@/lib/html"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/dashboard/clients/layout.tsx",
+          "hash": "11440959656494825780",
+          "deps": [
+            "npm:@/components/auth/AuthGuard",
+            "npm:@/components/dashboard/DashboardShell",
+            "npm:next/link",
+            "npm:next/navigation"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/dashboard/clients/post/page.tsx",
+          "hash": "3400956720774285289",
+          "deps": [
+            "npm:@/components/ui/Card",
+            "npm:@/components/ui/Button",
+            "npm:@/components/ui/Input",
+            "npm:@/components/ui/Dropdown",
+            "npm:@/components/ui/RichTextEditor",
+            "npm:@/components/ui/Badge",
+            "npm:@/components/ui/Modal",
+            "npm:react",
+            "npm:@/components/ui/Toast",
+            "npm:@/lib/api-client"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/dashboard/freelancers/applications/page.tsx",
+          "hash": "16444844694170831381",
+          "deps": [
+            "npm:@/components/ui/Card",
+            "npm:@/components/ui/Button",
+            "npm:@/components/ui/Badge",
+            "npm:react",
+            "npm:@/lib/api-client",
+            "npm:@/components/ui/Toast"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/dashboard/freelancers/find/page.tsx",
+          "hash": "14847669307129560622",
+          "deps": [
+            "npm:@/components/ui/Card",
+            "npm:@/components/ui/Button",
+            "npm:@/components/ui/Badge",
+            "npm:react",
+            "npm:@/lib/api-client",
+            "npm:@/components/ui/Toast",
+            "npm:@/lib/html"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/dashboard/freelancers/layout.tsx",
+          "hash": "12917315322747224061",
+          "deps": [
+            "npm:@/components/auth/AuthGuard",
+            "npm:@/components/dashboard/DashboardShell",
+            "npm:next/link",
+            "npm:next/navigation"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/dashboard/hire-me/page.tsx",
+          "hash": "6710746067344532066",
+          "deps": [
+            "npm:@/components/auth/AuthGuard",
+            "npm:@/components/dashboard/DashboardShell",
+            "npm:@/components/ui/Card",
+            "npm:@/context/AuthProvider"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/dashboard/page.tsx",
+          "hash": "11459566343133425194",
+          "deps": [
+            "npm:react",
+            "npm:@/components/auth/AuthGuard",
+            "npm:@/components/dashboard/DashboardShell",
+            "npm:@/components/auth/RecoveryEmailModal",
+            "npm:@/context/AuthProvider",
+            "npm:@/lib/api-client"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/dashboard/settings/appearance/page.tsx",
+          "hash": "11257901534193791233",
+          "deps": [
+            "npm:@/components/auth/AuthGuard",
+            "npm:@/components/dashboard/DashboardShell",
+            "npm:@/components/ui/ThemeToggle",
+            "npm:@/components/ui/Card"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/dashboard/settings/page.tsx",
+          "hash": "17270948110348998775",
+          "deps": [
+            "npm:@/components/auth/AuthGuard",
+            "npm:@/components/dashboard/DashboardShell",
+            "npm:next/link"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/dashboard/settings/profile/page.tsx",
+          "hash": "2037557041086237828",
+          "deps": [
+            "npm:react",
+            "npm:@/components/auth/AuthGuard",
+            "npm:@/components/dashboard/DashboardShell",
+            "npm:@/components/ui/Card",
+            "npm:@/components/ui/Button",
+            "npm:@/components/ui/Input",
+            "npm:@/components/ui/Collapse",
+            "npm:@/components/ui/Toast",
+            "npm:@/context/AuthProvider",
+            "npm:@/hooks/useProfile",
+            "npm:@/components/profile/AvatarUpload",
+            "npm:@/components/profile/SkillsSelector",
+            "npm:@/components/profile/PortfolioManager",
+            "npm:@/components/profile/ServicesManager",
+            "npm:@/components/profile/SocialLinksManager",
+            "npm:@/components/profile/CompletenessIndicator",
+            "npm:@/components/ui/Dropdown",
+            "npm:@/components/profile/UsernameEditor"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/dashboard/settings/security/page.tsx",
+          "hash": "825535519251280061",
+          "deps": [
+            "npm:react",
+            "npm:@/components/auth/AuthGuard",
+            "npm:@/components/dashboard/DashboardShell",
+            "npm:@/components/ui/Card",
+            "npm:@/components/ui/Button",
+            "npm:@/components/ui/Input",
+            "npm:@/components/ui/Switch",
+            "npm:@/components/ui/Badge",
+            "npm:@/components/ui/Modal",
+            "npm:@/components/ui/Collapse",
+            "npm:@/components/ui/Toast",
+            "npm:@/context/AuthProvider",
+            "npm:@/hooks/use2FA",
+            "npm:@/hooks/useRecoveryCodes",
+            "npm:@simplewebauthn/browser",
+            "npm:@/hooks/usePasskey",
+            "npm:@/hooks/useSessions",
+            "npm:@/lib/api-client",
+            "npm:@/hooks/useOtpResend"
+          ]
+        },
+        {
+          "file": "apps/web/src/app/freelancer/[slug]/page.tsx",
+          "hash": "6139908544482670068",
+          "deps": ["npm:next"]
+        },
+        {
+          "file": "apps/web/src/app/globals.css",
+          "hash": "17870891441604338472"
+        },
+        {
+          "file": "apps/web/src/app/layout.tsx",
+          "hash": "17556593019482648203",
+          "deps": ["npm:next", "npm:next/font/google"]
+        },
+        {
+          "file": "apps/web/src/app/page.tsx",
+          "hash": "3130842355791379109",
+          "deps": ["npm:@/components/ui/Logo"]
+        },
+        {
+          "file": "apps/web/src/app/providers.tsx",
+          "hash": "5756426511875287239",
+          "deps": ["npm:next-themes", "npm:@/context/AuthProvider", "npm:@/components/ui/Toast"]
+        },
+        {
+          "file": "apps/web/src/components/auth/AuthGuard.tsx",
+          "hash": "14906050565117866916",
+          "deps": [
+            "npm:react",
+            "npm:next/navigation",
+            "npm:@/context/AuthProvider",
+            "npm:@/components/ui/Button"
+          ]
+        },
+        {
+          "file": "apps/web/src/components/auth/AuthLayout.tsx",
+          "hash": "6217313522638293617",
+          "deps": [
+            "npm:react",
+            "npm:next/navigation",
+            "npm:@/components/ui/ThemeToggle",
+            "npm:@/components/ui/Logo"
+          ]
+        },
+        {
+          "file": "apps/web/src/components/auth/ForgotPasswordForm.tsx",
+          "hash": "14214343802979111256",
+          "deps": [
+            "npm:react",
+            "npm:next/link",
+            "npm:@/components/ui/Input",
+            "npm:@/components/ui/Button",
+            "npm:@/components/ui/Toast",
+            "npm:@/lib/api-client",
+            "npm:@/hooks/useOtpResend"
+          ]
+        },
+        {
+          "file": "apps/web/src/components/auth/GoogleSignInButton.tsx",
+          "hash": "13485536187264288790",
+          "deps": ["npm:react", "npm:next/navigation"]
+        },
+        {
+          "file": "apps/web/src/components/auth/LoginForm.tsx",
+          "hash": "414885121485635723",
+          "deps": [
+            "npm:react",
+            "npm:next/navigation",
+            "npm:next/link",
+            "npm:@/components/ui/Input",
+            "npm:@/components/ui/Button",
+            "npm:@/context/AuthProvider",
+            "npm:@/components/ui/Toast",
+            "npm:@/lib/api-client",
+            "npm:@simplewebauthn/browser",
+            "npm:@/hooks/usePasskey",
+            "npm:@/hooks/useOtpResend"
+          ]
+        },
+        {
+          "file": "apps/web/src/components/auth/RecoveryEmailModal.tsx",
+          "hash": "1770261236400061743",
+          "deps": [
+            "npm:react",
+            "npm:@/components/ui/Modal",
+            "npm:@/components/ui/Input",
+            "npm:@/components/ui/Button",
+            "npm:@/components/ui/Toast",
+            "npm:@/lib/api-client",
+            "npm:@/context/AuthProvider",
+            "npm:@/hooks/useOtpResend"
+          ]
+        },
+        {
+          "file": "apps/web/src/components/auth/ResetPasswordForm.tsx",
+          "hash": "8941800833445096321",
+          "deps": [
+            "npm:react",
+            "npm:next/navigation",
+            "npm:next/link",
+            "npm:@/components/ui/Input",
+            "npm:@/components/ui/Button",
+            "npm:@/components/ui/Toast",
+            "npm:@/lib/api-client"
+          ]
+        },
+        {
+          "file": "apps/web/src/components/auth/SignupForm.tsx",
+          "hash": "17402675086109247089",
+          "deps": [
+            "npm:react",
+            "npm:next/navigation",
+            "npm:next/link",
+            "npm:@/components/ui/Input",
+            "npm:@/components/ui/Button",
+            "npm:@/context/AuthProvider",
+            "npm:@/components/ui/Toast",
+            "npm:@/lib/api-client",
+            "npm:@/hooks/useOtpResend",
+            "npm:@simplewebauthn/browser"
+          ]
+        },
+        {
+          "file": "apps/web/src/components/auth/VerifyEmailForm.tsx",
+          "hash": "12025536467917235548",
+          "deps": [
+            "npm:react",
+            "npm:next/link",
+            "npm:@/components/ui/Input",
+            "npm:@/components/ui/Button",
+            "npm:@/components/ui/Toast",
+            "npm:@/lib/api-client",
+            "npm:@/hooks/useOtpResend"
+          ]
+        },
+        {
+          "file": "apps/web/src/components/dashboard/DashboardShell.tsx",
+          "hash": "1732825986844272678",
+          "deps": ["npm:react"]
+        },
+        {
+          "file": "apps/web/src/components/dashboard/Sidebar.tsx",
+          "hash": "7056656800434602899",
+          "deps": ["npm:next/link", "npm:next/navigation", "npm:react", "npm:@/components/ui/Logo"]
+        },
+        {
+          "file": "apps/web/src/components/dashboard/TopBar.tsx",
+          "hash": "6897774351906023783",
+          "deps": [
+            "npm:@/context/AuthProvider",
+            "npm:@/components/ui/ThemeToggle",
+            "npm:next/navigation",
+            "npm:@/components/ui/Toast"
+          ]
+        },
+        {
+          "file": "apps/web/src/components/profile/AvatarUpload.tsx",
+          "hash": "2069893332627271641",
+          "deps": [
+            "npm:react",
+            "npm:@/components/ui/Toast",
+            "npm:@/hooks/useProfile",
+            "npm:@/context/AuthProvider"
+          ]
+        },
+        {
+          "file": "apps/web/src/components/profile/CompletenessIndicator.tsx",
+          "hash": "3117925566679395222",
+          "deps": ["npm:react", "npm:@/lib/api-client"]
+        },
+        {
+          "file": "apps/web/src/components/profile/PortfolioManager.tsx",
+          "hash": "9295002055428880365",
+          "deps": [
+            "npm:react",
+            "npm:@/components/ui/Toast",
+            "npm:@/components/ui/Input",
+            "npm:@/components/ui/Button"
+          ]
+        },
+        {
+          "file": "apps/web/src/components/profile/ServicesManager.tsx",
+          "hash": "14165851479173248868",
+          "deps": [
+            "npm:react",
+            "npm:@/components/ui/Toast",
+            "npm:@/components/ui/Input",
+            "npm:@/components/ui/Button"
+          ]
+        },
+        {
+          "file": "apps/web/src/components/profile/SkillsSelector.tsx",
+          "hash": "2390008376693973357",
+          "deps": [
+            "npm:react",
+            "npm:@/lib/api-client",
+            "npm:@/components/ui/Toast",
+            "npm:@/components/ui/Input",
+            "npm:@/components/ui/Button"
+          ]
+        },
+        {
+          "file": "apps/web/src/components/profile/SocialLinksManager.tsx",
+          "hash": "17321716477844244065",
+          "deps": [
+            "npm:react",
+            "npm:@/components/ui/Toast",
+            "npm:@/components/ui/Input",
+            "npm:@/components/ui/Button",
+            "npm:@/components/ui/Dropdown"
+          ]
+        },
+        {
+          "file": "apps/web/src/components/profile/UsernameEditor.tsx",
+          "hash": "12318410911274519762",
+          "deps": [
+            "npm:react",
+            "npm:@/components/ui/Toast",
+            "npm:@/hooks/useProfile",
+            "npm:@/context/AuthProvider"
+          ]
+        },
+        {
+          "file": "apps/web/src/components/ui/Badge.tsx",
+          "hash": "13028191467864149895"
+        },
+        {
+          "file": "apps/web/src/components/ui/Button.tsx",
+          "hash": "1992708448104242179",
+          "deps": ["npm:react"]
+        },
+        {
+          "file": "apps/web/src/components/ui/Card.tsx",
+          "hash": "10820303228314671724",
+          "deps": ["npm:react"]
+        },
+        {
+          "file": "apps/web/src/components/ui/Collapse.tsx",
+          "hash": "16352987927476490276",
+          "deps": ["npm:react"]
+        },
+        {
+          "file": "apps/web/src/components/ui/Dropdown.tsx",
+          "hash": "4697243506852258531",
+          "deps": ["npm:react"]
+        },
+        {
+          "file": "apps/web/src/components/ui/Input.tsx",
+          "hash": "13823740224778455600",
+          "deps": ["npm:react"]
+        },
+        {
+          "file": "apps/web/src/components/ui/Logo.tsx",
+          "hash": "88846059926850535",
+          "deps": ["npm:next/link"]
+        },
+        {
+          "file": "apps/web/src/components/ui/Modal.tsx",
+          "hash": "6397416041405946631",
+          "deps": ["npm:react"]
+        },
+        {
+          "file": "apps/web/src/components/ui/RichTextEditor.tsx",
+          "hash": "969437718172114367",
+          "deps": [
+            "npm:@tiptap/react",
+            "npm:@tiptap/starter-kit",
+            "npm:@tiptap/extension-image",
+            "npm:@tiptap/extension-code-block-lowlight",
+            "npm:@tiptap/extension-placeholder",
+            "npm:@tiptap/extension-link",
+            "npm:lowlight",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/web/src/components/ui/Skeleton.tsx",
+          "hash": "5224760689218930404"
+        },
+        {
+          "file": "apps/web/src/components/ui/Switch.tsx",
+          "hash": "3288887480933900427"
+        },
+        {
+          "file": "apps/web/src/components/ui/ThemeToggle.tsx",
+          "hash": "9331400427609124780",
+          "deps": ["npm:next-themes", "npm:react"]
+        },
+        {
+          "file": "apps/web/src/components/ui/Toast.tsx",
+          "hash": "15162130127349385619",
+          "deps": ["npm:react"]
+        },
+        {
+          "file": "apps/web/src/context/AuthProvider.tsx",
+          "hash": "11093109126251675818",
+          "deps": ["npm:react", "npm:@/lib/api-client"]
+        },
+        {
+          "file": "apps/web/src/hooks/use2FA.ts",
+          "hash": "6359778561690242773",
+          "deps": ["npm:react", "npm:@/lib/api-client"]
+        },
+        {
+          "file": "apps/web/src/hooks/useOtpResend.ts",
+          "hash": "16036878222536138395",
+          "deps": ["npm:react"]
+        },
+        {
+          "file": "apps/web/src/hooks/usePasskey.ts",
+          "hash": "4168288281716870248",
+          "deps": ["npm:react", "npm:@/lib/api-client", "npm:@simplewebauthn/types"]
+        },
+        {
+          "file": "apps/web/src/hooks/useProfile.ts",
+          "hash": "15341973813804132400",
+          "deps": ["npm:react", "npm:@/lib/api-client"]
+        },
+        {
+          "file": "apps/web/src/hooks/useRecoveryCodes.ts",
+          "hash": "15596545418625984565",
+          "deps": ["npm:react", "npm:@/lib/api-client"]
+        },
+        {
+          "file": "apps/web/src/hooks/useSessions.ts",
+          "hash": "4968213634204086106",
+          "deps": ["npm:react", "npm:@/lib/api-client"]
+        },
+        {
+          "file": "apps/web/src/lib/api-client.ts",
+          "hash": "9382109329598369961"
+        },
+        {
+          "file": "apps/web/src/lib/html.ts",
+          "hash": "15401918394045487868"
+        },
+        {
+          "file": "apps/web/tailwind.config.js",
+          "hash": "1160654212193648768",
+          "deps": ["npm:tailwindcss/defaultTheme", "npm:@tailwindcss/typography"]
+        },
+        {
+          "file": "apps/web/tsconfig.json",
+          "hash": "15187043538110390917"
+        },
+        {
+          "file": "apps/web/tsconfig.tsbuildinfo",
+          "hash": "6556255666010415312"
+        }
+      ],
+      "shared": [
+        {
+          "file": "packages/shared/jest.config.ts",
+          "hash": "4009951195360371338",
+          "deps": ["npm:jest"]
+        },
+        {
+          "file": "packages/shared/package-lock.json",
+          "hash": "3344191991670254062"
+        },
+        {
+          "file": "packages/shared/package.json",
+          "hash": "1101413283321256841",
+          "deps": ["npm:typescript"]
+        },
+        {
+          "file": "packages/shared/project.json",
+          "hash": "1780384216161943402"
+        },
+        {
+          "file": "packages/shared/src/index.ts",
+          "hash": "3761196584448967751"
+        },
+        {
+          "file": "packages/shared/src/schemas/ai.schema.ts",
+          "hash": "4498513188270315601",
+          "deps": ["npm:zod"]
+        },
+        {
+          "file": "packages/shared/src/schemas/auth.schema.ts",
+          "hash": "18321546921608106284",
+          "deps": ["npm:zod"]
+        },
+        {
+          "file": "packages/shared/src/schemas/chat.schema.ts",
+          "hash": "3796513785430326322",
+          "deps": ["npm:zod"]
+        },
+        {
+          "file": "packages/shared/src/schemas/job.schema.ts",
+          "hash": "5816001755487732864",
+          "deps": ["npm:zod"]
+        },
+        {
+          "file": "packages/shared/src/schemas/payment.schema.ts",
+          "hash": "6180853934772695239",
+          "deps": ["npm:zod"]
+        },
+        {
+          "file": "packages/shared/src/schemas/user.schema.ts",
+          "hash": "11847526480326869779",
+          "deps": ["npm:zod"]
+        },
+        {
+          "file": "packages/shared/src/types/common.ts",
+          "hash": "16878366164835855770"
+        },
+        {
+          "file": "packages/shared/tsconfig.json",
+          "hash": "2806983189310945573"
+        },
+        {
+          "file": "packages/shared/tsconfig.lib.json",
+          "hash": "1162684258940112904"
+        },
+        {
+          "file": "packages/shared/tsconfig.spec.json",
+          "hash": "13837416778583578116"
+        }
+      ],
+      "chat": [
+        {
+          "file": "libs/chat/jest.config.ts",
+          "hash": "15519639755608477666",
+          "deps": ["npm:jest"]
+        },
+        {
+          "file": "libs/chat/project.json",
+          "hash": "8366579528326872403"
+        },
+        {
+          "file": "libs/chat/src/index.ts",
+          "hash": "6714922531299883355"
+        },
+        {
+          "file": "libs/chat/src/lib/chat.module.ts",
+          "hash": "17961422517160606227",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "libs/chat/src/lib/chat.service.ts",
+          "hash": "14256918851401979181",
+          "deps": ["npm:@nestjs/common"]
+        },
+        {
+          "file": "libs/chat/src/lib/chat.types.ts",
+          "hash": "1390931343760821505"
+        },
+        {
+          "file": "libs/chat/tsconfig.json",
+          "hash": "15673756882322724375"
+        },
+        {
+          "file": "libs/chat/tsconfig.lib.json",
+          "hash": "1162684258940112904"
+        },
+        {
+          "file": "libs/chat/tsconfig.spec.json",
+          "hash": "12674571080773351691"
+        }
+      ]
+    }
+  }
+}

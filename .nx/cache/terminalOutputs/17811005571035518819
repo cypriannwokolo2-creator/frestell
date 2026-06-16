@@ -1,0 +1,10 @@
+
+Linting "auth"...
+
+[0m[7m[1m[31m NX [39m[22m[27m[0m  [31mFailed to load plugin '@typescript-eslint' declared in '.eslintrc.json': Cannot find module '@typescript-eslint/eslint-plugin'[39m
+
+Require stack:
+- C:\Users\user\Desktop\frestell\__placeholder__.js
+Referenced from: C:\Users\user\Desktop\frestell\.eslintrc.json
+Pass --verbose to see the stacktrace.
+

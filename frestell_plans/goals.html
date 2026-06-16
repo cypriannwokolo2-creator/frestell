@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>FreStell · Phase 1 Ultimate Dev Guide & Tracker</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:opsz,wght@14..32,300..700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #03060C;
+            --bg-card: #0B111A;
+            --accent-cyan: #00C8E8;
+            --accent-green: #2AD4A0;
+            --accent-purple: #B185FF;
+            --accent-amber: #F5B042;
+            --accent-red: #FF5A6E;
+            --accent-orange: #FF8C42;
+            --accent-blue: #7BDFFF;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border-subtle: rgba(0, 200, 232, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            background: var(--bg-deep);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--text-primary);
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .stellar-glow {
+            box-shadow: 0 0 8px rgba(0, 200, 232, 0.35);
+        }
+        .progress-fill {
+            transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .category-section {
+            scroll-margin-top: 130px;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B111A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00C8E8;
+            border-radius: 4px;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: #0a0f18;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            border: 1px solid var(--border-subtle);
+        }
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            background: rgba(0, 200, 232, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        pre code {
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        /* Modal backdrop */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .modal-content {
+            background: #0F1923;
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            max-width: 720px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 28px;
+            animation: slideUp 0.25s ease;
+            position: relative;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+        }
+        .modal-content h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0 0 8px;
+            color: #fff;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+        .badge-easy {
+            background: #2AD4A020;
+            color: #2AD4A0;
+            border: 1px solid #2AD4A040;
+        }
+        .badge-medium {
+            background: #F5B04220;
+            color: #F5B042;
+            border: 1px solid #F5B04240;
+        }
+        .badge-hard {
+            background: #FF8C4220;
+            color: #FF8C42;
+            border: 1px solid #FF8C4240;
+        }
+        .badge-expert {
+            background: #FF5A6E20;
+            color: #FF5A6E;
+            border: 1px solid #FF5A6E40;
+        }
+        .copy-btn {
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+        .copy-btn:active {
+            transform: scale(0.94);
+        }
+
+        /* Hamburger */
+        .hamburger-line {
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        .hamburger-open .line-1 {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger-open .line-2 {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        .hamburger-open .line-3 {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: #0B111A;
+            border-right: 1px solid var(--border-subtle);
+            z-index: 90;
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 80px 20px 20px;
+            overflow-y: auto;
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+        .mobile-menu-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 89;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .mobile-menu-backdrop.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Highlight search */
+        .goal-highlight {
+            background: #F5B04230 !important;
+            border-color: #F5B042 !important;
+            animation: pulseHighlight 0.6s ease;
+        }
+        @keyframes pulseHighlight {
+            0%,
+            100% {
+                box-shadow: 0 0 0px #F5B042;
+            }
+            50% {
+                box-shadow: 0 0 18px #F5B04260;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .modal-content {
+                padding: 18px;
+                border-radius: 16px;
+                max-height: 90vh;
+            }
+            .modal-content h3 {
+                font-size: 1.1rem;
+            }
+            header .text-2xl {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-200">
+
+    <!-- ============ STICKY HEADER ============ -->
+    <header class="sticky top-0 z-50 bg-[#03060C]/92 backdrop-blur-md border-b border-[#00C8E8]/20" id="mainHeader">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 py-3 flex items-center justify-between gap-3 flex-wrap">
+            <!-- Left: Logo + hamburger -->
+            <div class="flex items-center gap-3">
+                <button id="hamburgerBtn" class="sm:hidden flex flex-col gap-1 p-2 rounded-lg hover:bg-gray-800 transition z-[95]"
+                aria-label="Menu">
+                <span class="hamburger-line line-1 block w-5 h-0.5 bg-white rounded"></span>
+                <span class="hamburger-line line-2 block w-5 h-0.5 bg-white rounded"></span>
+                <span class="hamburger-line line-3 block w-5 h-0.5 bg-white rounded"></span>
+            </button>
+            <div class="text-xl sm:text-2xl font-black bg-gradient-to-r from-[#00C8E8] to-[#2AD4A0] bg-clip-text text-transparent">
+                FreStell
+            </div>
+            <div class="text-[9px] sm:text-[10px] mono px-2 py-1 rounded-full bg-[#00C8E8]/10 border border-[#00C8E8]/30 text-[#00C8E8] hidden xs:inline-block">
+                PHASE 1 · SHIP
+            </div>
+        </div>
+        <!-- Center: search -->
+        <div class="flex-1 max-w-sm flex items-center gap-2 order-last sm:order-none w-full sm:w-auto mt-2 sm:mt-0">
+            <input type="text" id="searchInput" placeholder="Search goals or type to Google..."
+            class="w-full bg-[#0F1622] border border-gray-700 rounded-full px-4 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-[#00C8E8] transition mono">
+            <button id="googleSearchBtn" title="Search on Google"
+            class="px-3 py-2 rounded-full bg-gray-800 hover:bg-[#00C8E8]/20 border border-gray-700 hover:border-[#00C8E8] transition text-xs mono">
+            🔍 G
+        </button>
+    </div>
+    <!-- Right: progress + reset -->
+    <div class="flex items-center gap-3 flex-wrap">
+        <div class="hidden sm:flex items-center gap-2">
+            <div class="w-24 h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                <div id="globalProgressFill" class="h-full bg-gradient-to-r from-[#00C8E8] to-[#2AD4A0] w-0 progress-fill"></div>
+            </div>
+            <span id="progressPercent" class="mono text-sm text-[#00C8E8] w-10">0%</span>
+        </div>
+        <span id="countDisplay" class="mono text-xs text-gray-400">0/0</span>
+        <button id="resetBtn" class="text-xs mono border border-gray-700 hover:border-red-500 px-3 py-1.5 rounded-full transition">
+            ⟳ Reset
+        </button>
+    </div>
+</div>
+</header>
+
+<!-- ============ MOBILE MENU ============ -->
+<div class="mobile-menu-backdrop" id="mobileBackdrop"></div>
+<nav class="mobile-menu" id="mobileMenu">
+    <div class="text-sm font-bold text-[#00C8E8] mb-4 mono">📋 CATEGORIES</div>
+    <div id="mobileNavList" class="flex flex-col gap-1"></div>
+    <hr class="border-gray-700 my-4">
+    <button id="mobileResetBtn" class="text-xs mono text-red-400 hover:text-red-300 transition">⟳ Reset all progress</button>
+</nav>
+
+<!-- ============ HERO + STATS ============ -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-6">
+    <div class="flex flex-col gap-3">
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tighter bg-gradient-to-r from-white via-[#00C8E8] to-[#2AD4A0] bg-clip-text text-transparent">
+            Phase 1 · FreStell
+        </h1>
+        <p class="text-gray-400 max-w-3xl text-base sm:text-lg leading-relaxed">
+            The complete developer roadmap: from Nx monorepo → Soroban escrow → AI proposal coach → acceptance‑criteria enforcement.
+            <strong class="text-white">320+ actionable goals</strong> with deep‑dive guides, complexity ratings, and best practices.
+        </p>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mt-8">
+        <div class="bg-[#0B111A] border border-[#00C8E8]/20 rounded-2xl p-4">
+            <div class="text-3xl font-black text-[#2AD4A0]" id="statDone">0</div>
+            <div class="text-xs text-gray-400">completed</div>
+        </div>
+        <div class="bg-[#0B111A] border border-[#00C8E8]/20 rounded-2xl p-4">
+            <div class="text-3xl font-black text-[#00C8E8]" id="statRemaining">0</div>
+            <div class="text-xs text-gray-400">remaining</div>
+        </div>
+        <div class="bg-[#0B111A] border border-[#00C8E8]/20 rounded-2xl p-4">
+            <div class="text-3xl font-black text-white">15</div>
+            <div class="text-xs text-gray-400">categories</div>
+        </div>
+        <div class="bg-[#0B111A] border border-[#00C8E8]/20 rounded-2xl p-4">
+            <div class="text-3xl font-black text-[#F5B042]">~320</div>
+            <div class="text-xs text-gray-400">goals</div>
+        </div>
+        <div class="bg-[#0B111A] border border-[#00C8E8]/20 rounded-2xl p-4">
+            <div class="text-3xl font-black text-[#B185FF]">⭐</div>
+            <div class="text-xs text-gray-400">Soroban + Stellar</div>
+        </div>
+    </div>
+    <div id="completedBanner" class="mt-8 bg-gradient-to-r from-[#2AD4A0]/10 to-[#00C8E8]/10 border border-[#2AD4A0]/40 rounded-2xl p-6 text-center hidden">
+        <h2 class="text-xl sm:text-2xl font-bold">🚀 PHASE 1 COMPLETE – Move to Phase 2 🚀</h2>
+        <p class="text-gray-300 mt-1">All goals achieved. FreStell core is production ready.</p>
+    </div>
+</section>
+
+<!-- ============ CATEGORY NAV (STICKY DESKTOP) ============ -->
+<div class="sticky top-[73px] z-40 bg-[#03060C]/85 backdrop-blur-md border-b border-[#00C8E8]/20 py-2 hidden sm:block" id="desktopCatNav">
+    <div class="max-w-7xl mx-auto px-4 overflow-x-auto flex gap-2" id="catNavList"></div>
+</div>
+
+<!-- ============ MAIN CONTENT ============ -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-8" id="mainContent"></main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="border-t border-gray-800 text-center py-8 text-gray-500 text-xs">
+    FreStell – built on Stellar Soroban · Monorepo ready for hyperscale · AI proposal coach + escrow with acceptance rules ·
+    <span class="text-[#00C8E8]">Phase 1 Complete Guide</span>
+</footer>
+
+<!-- ============ MODAL OVERLAY (reusable) ============ -->
+<div id="modalOverlay" class="modal-overlay hidden" onclick="closeModal(event)">
+    <div class="modal-content" id="modalContent" onclick="event.stopPropagation()"></div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<div id="toast" class="fixed bottom-6 right-6 bg-[#2AD4A0] text-black font-bold px-5 py-3 rounded-xl shadow-lg z-[200] opacity-0 pointer-events-none transition-opacity duration-300 mono text-sm">
+    Copied!
+</div>
+
+<script>
+    (function() {
+        // ──────────────────────────────────────────────
+        // GOAL METADATA GENERATOR – creates rich explanations
+        // based on goal text + category context
+        // ──────────────────────────────────────────────
+        function generateGoalMeta(goalText, catId, idx) {
+            const lower = goalText.toLowerCase();
+            let complexity = 'Medium';
+            let explanation = '';
+            let approaches = [];
+            let pitfalls = [];
+            let codeSnippet = null;
+            let stellarNote = false;
+
+            // Detect complexity from keywords
+            if (lower.includes('soroban') || lower.includes('smart contract') || lower.includes('wasm') ||
+                lower.includes('ed25519') || lower.includes('claimable balance') || lower.includes('passkey') ||
+                lower.includes('webAuthn') || lower.includes('encrypt') || lower.includes('aes-256') ||
+                lower.includes('mutation test') || lower.includes('pen test') || lower.includes('owasp')) {
+                complexity = 'Expert';
+            } else if (lower.includes('deploy') || lower.includes('docker') || lower.includes('ci/cd') ||
+                lower.includes('kubernetes') || lower.includes('oauth') || lower.includes('2fa') ||
+                lower.includes('jwt') || lower.includes('integration test') || lower.includes('e2e') ||
+                lower.includes('load test') || lower.includes('prisma') || lower.includes('migration')) {
+                complexity = 'Hard';
+            } else if (lower.includes('create') || lower.includes('setup') || lower.includes('install') ||
+                lower.includes('configure') || lower.includes('add') || lower.includes('write unit test') ||
+                lower.includes('simple') || lower.includes('basic')) {
+                complexity = 'Easy';
+            }
+
+            // Stellar/Soroban deep explanations
+            if (catId === 'stellar') {
+                stellarNote = true;
+                if (lower.includes('soroban escrow contract')) {
+                    explanation =
+                        `<strong class="text-[#00C8E8]">Soroban Smart Contract Escrow – Deep Dive</strong><br><br>
+                Soroban is Stellar's smart contract platform. Contracts are written in <strong>Rust</strong> and compiled to <strong>WebAssembly (Wasm)</strong>. This means your escrow logic runs on-chain, is verifiable, and cannot be tampered with by any single party — including the platform.<br><br>
+                <strong>Why Rust + Wasm?</strong> Stellar chose this combo for safety (Rust's memory model prevents entire classes of bugs) and portability (Wasm runs in a sandboxed VM on the Stellar network). Your contract stores state like <code>job_id</code>, <code>client</code>, <code>freelancer</code>, <code>amount</code>, and <code>release_flag</code> directly on the ledger.<br><br>
+                <strong>Key concept:</strong> The contract is the <em>neutral third party</em>. Neither the client nor the freelancer can unilaterally move funds. The contract enforces rules like "only the client can approve release" or "admin can split 50/50 in dispute." This is far stronger than a database-held escrow because the rules are transparent and immutable once deployed.`;
+                    approaches = [
+                        'Write the contract in Rust using the Soroban SDK (`soroban-sdk` crate)',
+                        'Store all escrow state in the contract\'s persistent storage (not temporary)',
+                        'Use `require_auth()` to check that the caller is authorized for sensitive actions',
+                        'Test extensively against the Soroban testnet (futurenet) before mainnet',
+                        'Keep the contract simple: one escrow per job, clear release conditions'
+                    ];
+                    pitfalls = [
+                        '❌ Storing secret keys on-chain – never do this; the contract should only store public keys',
+                        '❌ Forgetting to handle the dispute freeze case in contract logic',
+                        '❌ Overcomplicating the contract – complex contracts are harder to audit and more likely to have bugs',
+                        '❌ Not testing edge cases like "what if the freelancer address is invalid?"',
+                        '❌ Hardcoding admin keys without an upgrade path'
+                    ];
+                    codeSnippet =
+                        `// Simplified Soroban escrow contract structure (Rust)
+        #![no_std]
+        use soroban_sdk::{contract, contractimpl, symbol_short, Env, Address, Map};
+
+        #[contract]
+        pub struct EscrowContract;
+
+        #[contractimpl]
+        impl EscrowContract {
+            pub fn init(env: Env, client: Address, freelancer: Address, amount: i128) {
+                // Store escrow state in persistent storage
+                env.storage().persistent().set(&symbol_short!("client"), &client);
+                env.storage().persistent().set(&symbol_short!("freelancer"), &freelancer);
+                env.storage().persistent().set(&symbol_short!("amount"), &amount);
+                env.storage().persistent().set(&symbol_short!("released"), &false);
+            }
+            pub fn release(env: Env, caller: Address) {
+                caller.require_auth();
+                // Only client (or admin) can release
+                let client: Address = env.storage().persistent().get(&symbol_short!("client")).unwrap();
+                if caller != client { panic!("only client can release"); }
+                // Transfer funds to freelancer...
+                env.storage().persistent().set(&symbol_short!("released"), &true);
+            }
+        }`;
+                } else if (lower.includes('claimable balance')) {
+                    explanation =
+                        `<strong class="text-[#00C8E8]">Claimable Balances – The Simpler Escrow Alternative</strong><br><br>
+                Before Soroban, Stellar had "claimable balances" as a built-in escrow mechanism. You create a balance entry with one or more <strong>claimants</strong> (who can claim it) and optional <strong>predicates</strong> (conditions like time locks).<br><br>
+                For your marketplace, claimable balances work for simple hold-and-release flows where the rules are straightforward: "Freelancer can claim after 7 days OR client can claw back." They are less flexible than Soroban contracts but also simpler to implement and audit.<br><br>
+                <strong>When to use:</strong> Simple escrow with time-based or basic conditional release. <strong>When to use Soroban instead:</strong> Complex multi-party logic, disputes, partial splits, or when you need custom authorization rules.`;
+                    approaches = [
+                        'Use `Claimant::new(account_id)` and `ClaimPredicate::BeforeRelativeTime` for time-locked claims',
+                        'Fall back to claimable balances if Soroban contract deployment is delayed',
+                        'Track the claimable balance ID in your database for reference'
+                    ];
+                    pitfalls = [
+                        '❌ Claimable balances have a max lifetime; ensure your escrow timeline fits within it',
+                        '❌ The predicate system is limited – complex "if-else" logic needs Soroban'
+                    ];
+                } else if (lower.includes('secret key') || lower.includes('encrypt')) {
+                    explanation =
+                        `<strong class="text-[#00C8E8]">Stellar Key Management & Encryption</strong><br><br>
+                Stellar uses <strong>Ed25519</strong> key pairs. The secret key is 32 bytes of random data that can sign transactions. <strong>Never store secret keys in plaintext</strong> in your database. Use <strong>AES-256-GCM</strong> (authenticated encryption) with a master key stored only in environment variables or a secrets manager.<br><br>
+                <strong>GCM mode</strong> is important because it provides both encryption AND authentication – it detects if the ciphertext has been tampered with. The nonce (initialization vector) must be unique per encryption but can be stored alongside the ciphertext.<br><br>
+                For production, consider using <strong>HSM (Hardware Security Module)</strong> or a cloud KMS for the master key. Never derive user keys from passwords without proper key derivation (Argon2/bcrypt).`;
+                    approaches = [
+                        'Use Node.js `crypto` module with `aes-256-gcm`',
+                        'Generate a unique 12-byte nonce per encryption, prepend it to the stored blob',
+                        'Master key from env var, never committed to git',
+                        'Rotate master keys with a re-encryption migration script'
+                    ];
+                    pitfalls = [
+                        '❌ Using ECB mode or CBC without authentication – always use GCM',
+                        '❌ Reusing nonces with the same key – catastrophic for GCM security',
+                        '❌ Storing the master key in the same database as the encrypted data'
+                    ];
+                    codeSnippet =
+                        `// AES-256-GCM encryption in Node.js
+        const crypto = require('crypto');
+        function encrypt(plaintext, masterKey) {
+            const nonce = crypto.randomBytes(12); // 96-bit nonce for GCM
+            const cipher = crypto.createCipheriv('aes-256-gcm', masterKey, nonce);
+            const ciphertext = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()]);
+            const authTag = cipher.getAuthTag();
+            // Store: nonce + authTag + ciphertext (all together)
+            return Buffer.concat([nonce, authTag, ciphertext]).toString('base64');
+        }`;
+                } else if (lower.includes('transaction monitoring') || lower.includes('horizon')) {
+                    explanation =
+                        `<strong class="text-[#00C8E8]">Horizon & Transaction Monitoring</strong><br><br>
+                <strong>Horizon</strong> is Stellar's REST API that lets you query the ledger and submit transactions. Your backend will poll Horizon to monitor for incoming deposits and track the status of escrow transactions.<br><br>
+                <strong>Polling strategy:</strong> Use exponential backoff – start with 2-second intervals and increase up to 30 seconds. This prevents hammering the Horizon server while still catching transactions quickly. For production, consider using <strong>Stellar's websocket</strong> or SSE (Server-Sent Events) for real-time updates instead of polling.`;
+                    approaches = [
+                        'Start with polling (simpler), then migrate to websocket for production',
+                        'Use `stellar-sdk`\'s `Server` class to query Horizon',
+                        'Implement idempotency keys so retried submissions don\'t double-spend',
+                        'Log all transaction attempts with their Horizon response for debugging'
+                    ];
+                    pitfalls = [
+                        '❌ Polling too frequently – you\'ll hit rate limits and waste resources',
+                        '❌ Not handling network errors – Horizon can be temporarily unavailable',
+                        '❌ Assuming a transaction succeeded just because it was submitted – always check the ledger response'
+                    ];
+                }
+            }
+
+            // AI-related explanations
+            if (catId === 'proposals' && (lower.includes('ai') || lower.includes('llm') || lower.includes('authenticity') ||
+                    lower.includes('coach'))) {
+                explanation = (explanation || '') +
+                    `<br><br><strong class="text-[#7BDFFF]">AI Proposal Coach – Architecture Deep Dive</strong><br><br>
+            The AI layer must be <strong>provider-agnostic</strong>. Do not hard-wire to OpenAI, Anthropic, or any specific model. Build an <strong>adapter interface</strong> that your application calls, and implement providers behind that interface.<br><br>
+            <strong>Authenticity Score:</strong> Calculate the normalized edit distance (Levenshtein) between the AI-generated draft and what the freelancer actually submits. Low edit distance = high AI reliance. High edit distance = more human input. Display an "Authentic" badge when the freelancer significantly modified the draft.<br><br>
+            <strong>Prompt Engineering:</strong> Your prompt should include the job title, description, required skills, budget, deadline, AND the freelancer's profile summary. The LLM then tailors the proposal to both the job and the freelancer's background.`;
+                if (lower.includes('edit distance')) {
+                    codeSnippet =
+                        `// Normalized Levenshtein distance for authenticity score
+        function levenshteinDistance(a, b) {
+            const matrix = Array.from({length: a.length+1}, (_,i)=>[i]);
+            for(let j=1; j<=b.length; j++) matrix[0][j]=j;
+            for(let i=1; i<=a.length; i++)
+                for(let j=1; j<=b.length; j++)
+                    matrix[i][j] = Math.min(matrix[i-1][j]+1, matrix[i][j-1]+1,
+                        matrix[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+            return matrix[a.length][b.length];
+        }
+        function authenticityScore(aiDraft, finalSubmission) {
+            const maxLen = Math.max(aiDraft.length, finalSubmission.length);
+            if(maxLen===0) return 100;
+            return Math.round((1 - levenshteinDistance(aiDraft, finalSubmission)/maxLen)*100);
+        }`;
+                }
+            }
+
+            // Auth/passkey explanations
+            if (catId === 'auth-passkeys' && lower.includes('passkey')) {
+                explanation = (explanation || '') +
+                    `<br><br><strong class="text-[#B185FF]">WebAuthn Passkeys – What They Actually Are</strong><br><br>
+            Passkeys use the <strong>WebAuthn standard</strong> (part of FIDO2). Instead of passwords, the user's device generates a <strong>public-private key pair</strong>. The public key is sent to your server and stored. The private key never leaves the user's device (secured by biometrics or device PIN).<br><br>
+            During login, your server sends a <strong>challenge</strong> (random bytes). The device signs it with the private key. Your server verifies the signature using the stored public key. This proves the user has the device AND the biometric/PIN without ever exposing the private key.<br><br>
+            <strong>Why it's secure:</strong> Phishing-resistant (tied to your domain), no password to steal, and the private key is hardware-bound. <code>@simplewebauthn/server</code> handles the cryptographic verification for you.`;
+            }
+
+            // Default explanation builder for goals without specific deep dives
+            if (!explanation) {
+                explanation = generateDefaultExplanation(goalText, catId);
+            }
+            if (!approaches.length) {
+                approaches = generateDefaultApproaches(goalText, catId);
+            }
+            if (!pitfalls.length) {
+                pitfalls = generateDefaultPitfalls(goalText, catId);
+            }
+
+            return { complexity, explanation, approaches, pitfalls, codeSnippet, stellarNote };
+        }
+
+        function generateDefaultExplanation(goalText, catId) {
+            const categoryContext = {
+                'monorepo': 'This is part of setting up the Nx monorepo architecture. Nx treats every business domain as a separate library, which makes future microservice extraction painless.',
+                'auth-passkeys': 'Authentication is the foundation of trust. Getting this right means users can securely access the platform with modern, phishing-resistant methods.',
+                'profiles': 'Rich profiles with portfolios and skill taxonomies help freelancers stand out and help clients make informed hiring decisions.',
+                'verification': 'The 3-tier verification system builds trust incrementally. Each tier unlocks more platform features and signals reliability.',
+                'jobs': 'Structured job posting with mandatory acceptance criteria prevents scope creep and sets clear expectations from the start.',
+                'proposals': 'The AI proposal coach helps freelancers write better proposals while maintaining authenticity through transparency scores.',
+                'hiring': 'Contracts formalize the work agreement. Clear deliverables, milestones, and acceptance criteria protect both parties.',
+                'stellar': 'Stellar Soroban provides the trustless escrow layer. Funds are locked on-chain and released only when conditions are met.',
+                'workspace': 'The project workspace centralizes communication, file sharing, and work submission in one organized space.',
+                'disputes': 'A fair dispute resolution system with clear policies and time-bound decisions protects both clients and freelancers.',
+                'reviews': 'Double-blind reviews prevent retaliation bias and provide honest feedback for the community.',
+                'admin': 'The admin panel is the control center for trust, moderation, and oversight — essential for an early-stage marketplace.',
+                'devops': 'Proper DevOps ensures reliable deployments, monitoring, and the ability to scale when traffic grows.',
+                'testing': 'Comprehensive testing catches bugs before users do. Security testing protects sensitive data and funds.',
+            };
+            return `<strong>Goal Context:</strong> ${categoryContext[catId] || 'This task contributes to building a robust, production-ready freelance marketplace.'}<br><br>
+        <strong>What this involves:</strong> ${goalText}. Take time to understand the underlying concepts before implementing. Refer to the official documentation for the tools and libraries mentioned.`;
+        }
+
+        function generateDefaultApproaches(goalText, catId) {
+            return [
+                '✅ Read the official documentation for any mentioned library or tool first',
+                '✅ Break the task into smaller sub-tasks if it feels overwhelming',
+                '✅ Write tests as you go – don\'t leave testing for the end',
+                '✅ Commit your work in small, logical chunks with clear messages',
+                '✅ Ask for code review from a peer or use AI-assisted review tools',
+            ];
+        }
+
+        function generateDefaultPitfalls(goalText, catId) {
+            return [
+                '❌ Skipping the documentation and jumping straight to code',
+                '❌ Copy-pasting from tutorials without understanding the code',
+                '❌ Ignoring error handling and edge cases',
+                '❌ Hardcoding values that should be environment variables',
+                '❌ Not testing on a staging environment before pushing to production',
+            ];
+        }
+
+        // ──────────────────────────────────────────────
+        // CATEGORIES DATA – 15 categories, 320+ goals
+        // ──────────────────────────────────────────────
+        const categories = [{
+            id: "monorepo",
+            icon: "🏗️",
+            title: "Monorepo & Nx Architecture",
+            color: "#00C8E8",
+            guide: `<strong class="text-[#00C8E8]">⚡ Nx + NestJS + Next.js Modular Monolith</strong><br><br>
+        <strong>Core Philosophy:</strong> We treat every business domain as a separate library. Shared types, Prisma schemas, and Zod validators live in <code>packages/shared</code>. This structure lets you extract microservices later <em>without rewriting logic</em> — the service boundaries are already clean.<br><br>
+        <strong>Why Nx?</strong> Nx understands your project graph. It only rebuilds what changed. It enforces module boundaries so you can't accidentally create circular dependencies. It also generates boilerplate, runs tasks in parallel, and caches build artifacts.<br><br>
+        <strong>The folder shape that matters:</strong>
+        <pre>apps/
+          web/       (Next.js frontend)
+          api/       (NestJS backend)
+        packages/
+          shared/    (Zod schemas, DTOs, Prisma client, types)
+        services/    (future: ai, payments, blockchain, chat)</pre>
+        <strong>Key principle:</strong> Write code as if each service is already remote. Use explicit DTOs, avoid direct database access across domains, and communicate through well-defined interfaces. When you later split into separate servers, only the transport layer changes.`,
+            goals: [
+                "Create Nx workspace: npx create-nx-workspace@latest frestell --preset=ts",
+                "Add @nx/next and @nx/nest: npm install -D @nx/next @nx/nest",
+                "Generate apps/web (Next.js) and apps/api (NestJS) with proper Nx generators",
+                "Create packages/shared with Zod schemas for all DTOs and shared types",
+                "Set up Prisma ORM with PostgreSQL, generate initial migration with proper relation modeling",
+                "Write Docker Compose file: postgres:15, redis:7, adminer for local dev",
+                "Setup GitHub Actions CI pipeline: lint, test, build, and security scan on every PR",
+                "Configure environment validation with Zod + dotenv (fail fast on missing vars)",
+                "Add health check endpoints: /health (basic), /ready (DB connected), /live (server alive)",
+                "Implement structured logging with Pino (JSON logs, request ID tracing)",
+                "Configure Cloudflare DNS & Origin CA for api subdomain with proxy enabled",
+                "Add Nx buildable libraries for each domain (auth, jobs, payments, chat, AI)",
+                "Write ADR (Architecture Decision Record) for modular monolith → service split strategy",
+                "Setup Husky + lint-staged + ESLint + Prettier for consistent code quality",
+                "Create shared error classes & NestJS exception filters for consistent API responses",
+                "Add rate limiting middleware (express-rate-limit or @nestjs/throttler) with Redis store",
+                "Implement graceful shutdown on SIGTERM (close DB, drain connections)",
+                "Add Swagger/OpenAPI documentation for all NestJS controllers",
+                "Configure CORS (explicit origins), Helmet (security headers), and compression",
+                "Write integration test setup with supertest and testcontainers for Postgres"
+            ]
+        }, {
+            id: "auth-passkeys",
+            icon: "🔐",
+            title: "Authentication + Passkeys",
+            color: "#B185FF",
+            guide: `<strong class="text-[#B185FF]">🔑 WebAuthn Passkeys + JWT + 2FA</strong><br><br>
+        <strong>Passkeys (WebAuthn/FIDO2):</strong> Instead of passwords, the user's device generates a public-private key pair. The public key is stored on your server. During login, the server sends a random challenge, the device signs it with the private key (unlocked by biometrics/PIN), and the server verifies the signature. The private key <em>never leaves the device</em>. This is phishing-resistant because the credential is bound to your domain.<br><br>
+        <strong>@simplewebauthn:</strong> This library handles the complex cryptography. On the server: <code>generateRegistrationOptions()</code> and <code>verifyRegistrationResponse()</code>. On the client: <code>startRegistration()</code>. Store challenges in Redis with a short TTL (5 minutes).<br><br>
+        <strong>JWT Strategy:</strong> Access tokens (short-lived, 15 min) + refresh tokens (long-lived, 7 days, HttpOnly cookie). Rotate refresh tokens on each use. Store a token family in the database to detect reuse (potential theft).`,
+            goals: [
+                "Install @simplewebauthn/server, @simplewebauthn/browser, argon2, jsonwebtoken, @nestjs/jwt",
+                "Build passkey registration endpoint: generate options, store challenge in Redis (5-min TTL)",
+                "Implement passkey authentication flow: generate assertion options, verify signature, return JWT",
+                "Store credential ID, public key (COSE format), counter, and transports in database",
+                "Add email+password registration with Argon2 hashing and email verification via nodemailer",
+                "Implement JWT access/refresh tokens with HttpOnly cookies and CSRF protection",
+                "Build password reset flow: rate-limited, time-limited token (15 min), emailed link",
+                "Integrate Google OAuth 2.0 (passport strategy or @nestjs/passport)",
+                "Add TOTP 2FA using speakeasy + qrcode; enforce for all admin accounts",
+                "Session management: list all active sessions with device info, allow revocation",
+                "Add login rate limiting: 5 failed attempts → 15-minute lockout per IP + per account",
+                "Implement account deletion: soft delete with 30-day restore window, GDPR-compliant",
+                "Add CSRF protection using SameSite=Strict cookies + csurf middleware",
+                "Build lockout notification email after repeated failed login attempts",
+                "Write integration tests for all auth endpoints (register, login, refresh, passkey)",
+                "Add account recovery codes: one-time backup codes for 2FA bypass",
+                "Implement admin role guard with separate admin login flow (no passkey for admins initially)",
+                "Add audit log for security events: login, 2FA enable/disable, password change, passkey add/remove",
+                "Support multiple passkeys per user with device nickname management UI",
+                "Write end-to-end WebAuthn tests using @simplewebauthn/testing and Playwright"
+            ]
+        }, {
+            id: "profiles",
+            icon: "👤",
+            title: "User Profiles (Client/Freelancer)",
+            color: "#F5B042",
+            guide: `<strong class="text-[#F5B042]">📇 Rich Profiles + Skill Taxonomy + Portfolio</strong><br><br>
+        Profiles are the core identity layer. A freelancer's profile is their storefront — it must showcase skills, past work, and credibility. A client's profile signals seriousness and payment reliability.<br><br>
+        <strong>Profile Completeness Score:</strong> Calculate a 0-100% score based on: avatar uploaded, bio written, skills added (min 3), portfolio items (min 1), verification tier, and social links. Show prompts for missing items to encourage completion.<br><br>
+        <strong>SEO-Friendly Public Pages:</strong> Use Next.js ISR (Incremental Static Regeneration) for public profile routes like <code>/freelancer/[slug]</code>. Generate meta tags dynamically based on profile data. This helps freelancers get discovered via search engines.`,
+            goals: [
+                "Design Prisma models: FreelancerProfile, ClientProfile, PortfolioItem, ServiceOffering",
+                "Create profile API endpoints: GET /profile/:slug, PATCH /profile, POST /profile/avatar",
+                "Integrate Cloudflare R2 or AWS S3 for image upload with presigned URLs (secure, time-limited)",
+                "Build skills tagging system: predefined taxonomy (200+ skills) + custom skill suggestion",
+                "Add portfolio entries: title, description, multiple images, live URL, GitHub link, completion date",
+                "Implement profile completeness indicator: 0-100% with contextual prompts for missing items",
+                "Build public profile routes: /freelancer/[slug] with ISR (revalidate every 60s)",
+                "Add social links (GitHub, LinkedIn, Twitter, personal website) with URL format validation",
+                "Implement profile visibility settings: public, private (hired-only), hidden",
+                "Add 'currently available for work' toggle that updates the search index in real-time",
+                "Build services section: freelancer-defined service offerings with title, description, rate range",
+                "Write validation with class-validator + Zod for all profile update DTOs",
+                "Add optimistic UI updates in frontend using react-query or SWR for snappy UX",
+                "Write unit tests for profile CRUD operations and completeness calculation logic",
+                "Add location field with timezone auto-detection (Intl API)",
+                "Implement client company profile with industry, size, website, and verification badge",
+                "Add profile view analytics: track who viewed the profile (anonymized for privacy)",
+                "Build profile export as JSON resume (JSON Resume schema compatible)",
+                "Add portfolio lightbox gallery with image zoom and keyboard navigation",
+                "Implement skill endorsement feature: past clients can endorse specific skills"
+            ]
+        }, {
+            id: "verification",
+            icon: "✅",
+            title: "Verification (3‑Tier System)",
+            color: "#2AD4A0",
+            guide: `<strong class="text-[#2AD4A0]">🎖️ Tier1 (Email/Phone) → Tier2 (ID via Stripe Identity) → Tier3 (Skill Badge)</strong><br><br>
+        Verification builds trust incrementally. Each tier unlocks more platform features. <strong>Tier1</strong> is basic (proves you're reachable). <strong>Tier2</strong> is government ID (proves you're a real person). <strong>Tier3</strong> is earned through successful work (proves you're skilled).<br><br>
+        <strong>Stripe Identity:</strong> Handles document upload, facial matching, and compliance. You receive webhooks for verified/rejected events. Keep the integration minimal — Stripe handles the heavy KYC/AML lifting.<br><br>
+        <strong>Tier3 Badge Trigger:</strong> Automatically awarded after completing 3 contracts with 4+ star ratings in a specific skill category. This is a SQL query that runs on contract completion.`,
+            goals: [
+                "Create verification_tier table: user_id, tier (1|2|3), status, metadata JSON, timestamps",
+                "Implement phone verification via Twilio Verify SMS OTP (one-time code, 5-min expiry)",
+                "Integrate Stripe Identity for ID document upload and facial matching",
+                "Build webhook handler for Stripe Identity events (verified, rejected, requires_input)",
+                "Create admin review queue for Tier2 manual edge cases (blurry documents, name mismatches)",
+                "Implement Tier3 badge logic: SQL query/trigger after 3 completed contracts (4+ stars) in a category",
+                "Display verification badges prominently on profiles, proposal cards, and search results",
+                "Add verification audit log: every status change with timestamp, actor, and reason",
+                "Send email notifications on tier change (congratulations on Tier2, etc.)",
+                "Write unit tests for badge trigger logic using mocked completed contracts",
+                "Add KYC rejection flow: show specific reason, allow appeal with resubmission",
+                "Create public /verification page explaining each tier, benefits, and how to qualify",
+                "Implement auto-refresh of Tier1 phone verification after 12 months (re-verify)",
+                "Add optional blockchain hash of verification proof for tamper-evident audit trail",
+                "Build admin dashboard section showing pending verification requests with filters",
+                "Support corporate KYC for enterprise clients (business registration documents)",
+                "Add tier filter in freelancer discovery: 'Show only Tier2+ freelancers'",
+                "Implement SMS fallback to voice call for phone verification (accessibility)",
+                "Write integration tests for full tier promotion flow (Tier1 → Tier2 → Tier3)",
+                "Add ID document retention policy: auto-delete after X months per privacy policy"
+            ]
+        }, {
+            id: "jobs",
+            icon: "📋",
+            title: "Job Posting & Acceptance Criteria",
+            color: "#FF8C42",
+            guide: `<strong class="text-[#FF8C42]">📌 Mandatory Acceptance Criteria – No Job Without Explicit "Done" Checklist</strong><br><br>
+        This is the <strong>quality control foundation</strong> of the entire platform. A vague job post leads to disputes. A job with clear acceptance criteria sets expectations from day one.<br><br>
+        <strong>The rule:</strong> A job cannot be published until the client defines at least 3 specific, measurable acceptance criteria. Example: "The landing page must load in under 2 seconds on mobile (Lighthouse score >90)" is good. "Make it look nice" is not allowed.<br><br>
+        <strong>Budget Types:</strong> Fixed-price (with milestone breakdown option) or hourly (with min/max hours and rate validation). The budget type affects how the escrow is structured later.`,
+            goals: [
+                "Build job creation form: title, description (rich text), skills, budget, deadline, attachments",
+                "Require acceptance criteria field: minimum 3 checklist items, each with detailed description",
+                "Add rich text editor (TipTap or Lexical) with image embedding and code block support",
+                "Budget type selection: fixed-price (single or milestone-based) or hourly with min/max validation",
+                "Integrate skill taxonomy from packages/shared: autocomplete with 200+ predefined skills",
+                "Implement auto-save draft every 30 seconds (localStorage + server sync for resilience)",
+                "Job publish state machine: draft → review → active → in_progress → completed → archived",
+                "Job categories & subcategories: multi-level hierarchy (e.g., Development > Web > React)",
+                "Edit job with change history: track what changed, when, and by whom (version diff)",
+                "Job auto-expiry: close job after deadline passes, send email reminder 48h before",
+                "Job duplication feature: clone an existing job post with all fields (modify before publishing)",
+                "File attachments: max 20MB per file, allowed types (PDF, images, documents), virus scan",
+                "Spam detection heuristic: flag jobs with suspicious patterns for admin review",
+                "Visibility settings: public (searchable), invite-only (link-based), hidden (draft)",
+                "Write integration tests for the full job lifecycle: create → publish → hire → complete → archive",
+                "Add job preview mode: see how the job looks to freelancers before publishing",
+                "Job archiving: soft delete for compliance, retain for 7 years for legal records",
+                "Add job boost feature: paid promotion that increases visibility in search results",
+                "Implement application limit: cap number of proposals a job can receive (configurable)",
+                "Job analytics dashboard for clients: views, applications, shortlist rate, conversion"
+            ]
+        }, {
+            id: "proposals",
+            icon: "✉️",
+            title: "AI Proposal Coach",
+            color: "#7BDFFF",
+            guide: `<strong class="text-[#7BDFFF]">🤖 Structured Questionnaire → LLM Draft → Authenticity Score</strong><br><br>
+        <strong>The AI doesn't write proposals FOR freelancers — it coaches them to write better ones.</strong> The system asks the freelancer targeted questions about their experience and approach, then generates a draft that the freelancer MUST edit before submitting.<br><br>
+        <strong>Authenticity Score:</strong> We calculate the normalized Levenshtein distance between the AI draft and the final submission. A high score (freelancer edited heavily) earns an "Authentic" badge. A low score (copy-pasted AI text) gets flagged. Clients can sort proposals by authenticity.<br><br>
+        <strong>Provider Abstraction:</strong> The AI service is an abstract interface. Implementations exist for OpenAI, Anthropic, and local models. Swap providers without touching application code. This prevents vendor lock-in and allows using free/cheaper models as they improve.`,
+            goals: [
+                "Create proposal schema: cover_letter, proposed_price, delivery_days, answers_to_questions",
+                "Enforce proposal limits: 3 AI-coached proposals per job, unlimited manual proposals",
+                "Build multi-step questionnaire: 'Describe your relevant experience', 'What's your approach?', 'Links to similar work'",
+                "Create AI adapter interface: proposalDraft(job, freelancerProfile, answers) → draft text",
+                "Implement OpenAI provider behind the AI adapter (first implementation, swap later if needed)",
+                "Generate proposal draft using prompt engineering: job context + freelancer answers + profile",
+                "Calculate AI assistance score: normalized Levenshtein distance between AI draft and final submission",
+                "Display 'Authentic' badge when score >60% (freelancer significantly modified the AI draft)",
+                "Build proposal editing interface with side-by-side view of AI draft and editable final version",
+                "Client proposal list view: sort by authenticity, price, rating, delivery time, relevance",
+                "Proposal status tracking: submitted, viewed, shortlisted, hired, rejected, withdrawn, expired",
+                "Mark proposal as 'viewed' when client opens it (read receipt for freelancer)",
+                "Allow proposal withdrawal before client makes a hiring decision",
+                "Save proposal templates for freelancers: reusable sections for common job types",
+                "Build side-by-side proposal comparison matrix for clients (spreadsheet-like view)",
+                "Write unit tests for AI score calculation, proposal limits, and status transitions",
+                "Add 'AI help' toggle: freelancers can opt out of AI assistance entirely",
+                "Store proposal version history: track every edit for potential dispute evidence",
+                "Implement proposal analytics: open rate, shortlist rate, hire rate per freelancer",
+                "Add proposal feedback: when rejected, client can optionally provide a reason",
+                "Build proposal export to PDF (for freelancer portfolio or client records)"
+            ]
+        }, {
+            id: "hiring",
+            icon: "🤝",
+            title: "Hiring & Smart Contracts",
+            color: "#F5B042",
+            guide: `<strong class="text-[#F5B042]">📄 Contract from Job + Proposal → Deliverables, Price, Deadline, Acceptance Criteria</strong><br><br>
+        When a client selects a proposal, the system generates a <strong>contract object</strong> that combines the job's acceptance criteria, the freelancer's proposed price and timeline, and the platform's standard terms.<br><br>
+        <strong>Contract as Source of Truth:</strong> The contract is the legally binding agreement. It freezes the acceptance criteria at the time of hiring — even if the job post is later edited, the contract's criteria are what matter for approval.<br><br>
+        <strong>Amendment Flow:</strong> Either party can propose changes. The other party must approve. Each amendment creates a new version. The contract history is immutable and auditable.`,
+            goals: [
+                "Hire action: client selects a proposal → system generates contract object from job + proposal",
+                "Contract schema: deliverables (from acceptance criteria), milestones, total_amount, deadline, criteria snapshot",
+                "Freelancer review & accept UI: view contract, accept, or propose counter-offer with modified terms",
+                "Contract amendment flow: change request → review → approval → version bump → audit log entry",
+                "Contract timeline: Gantt-style visualization of milestones, deadlines, and dependencies",
+                "Contract state machine: draft → pending_acceptance → active → completed → disputed → cancelled",
+                "Decline hire flow: client must provide a reason (feedback for freelancer, platform quality data)",
+                "Auto-update job status to 'In Progress' when the first contract becomes active",
+                "Contract detail page: full view with actions for both parties (submit, approve, dispute, amend)",
+                "Export contract as PDF: use pdfkit or puppeteer, include all terms, criteria, and signatures",
+                "Notifications: contract created, accepted, milestone approaching (48h), deadline warning",
+                "Counter-proposal: freelancer modifies price/timeline before initial acceptance",
+                "Full contract history log: every action with actor, timestamp, old value, new value",
+                "Client dashboard widget: active contracts summary with progress indicators",
+                "Integration tests: full flow from hire → contract → acceptance → active state",
+                "Add contract milestone payment schedule (linked to escrow releases)",
+                "Implement contract template library for common project types (saves time for repeat clients)",
+                "Add contract reminders: email + in-app notification for upcoming deadlines",
+                "Sign contract with on-chain hash: store contract hash as Stellar transaction memo",
+                "Store signed contract hash in the Soroban escrow contract for tamper-proof reference"
+            ]
+        }, {
+            id: "stellar",
+            icon: "⭐",
+            title: "Stellar & Soroban Escrow",
+            color: "#00C8E8",
+            guide: `<strong class="text-[#00C8E8]">🌐 Soroban Smart Contract Escrow (Rust) + USDC on Stellar</strong><br><br>
+        <strong>Why blockchain escrow?</strong> A database-held escrow is just a promise from the platform. A Soroban smart contract escrow is <em>trustless</em> — the rules are enforced by code on the Stellar network. Neither the platform, client, nor freelancer can unilaterally move funds.<br><br>
+        <strong>Stellar Basics:</strong> Stellar is a blockchain optimized for payments. Transactions settle in 3-5 seconds. Fees are fractions of a cent. USDC on Stellar is a regulated, dollar-backed stablecoin issued by Circle.<br><br>
+        <strong>Soroban:</strong> Stellar's smart contract platform. Contracts are written in Rust, compiled to Wasm, and run in a sandboxed VM. They have access to persistent storage on the ledger. Your escrow contract stores the job ID, parties, amount, and release conditions.<br><br>
+        <strong>Key Management:</strong> Platform holds a custodial wallet. User funds are held in the Soroban contract, not the platform wallet. Private keys are encrypted with AES-256-GCM. Never store plaintext keys.`,
+            goals: [
+                "Setup Stellar SDK (@stellar/stellar-sdk) in NestJS, connect to testnet (Testnet for development)",
+                "Create platform custodial account: fund with XLM for reserves and transaction fees",
+                "Build user Stellar account creation: generate keypair, encrypt secret key, store in DB",
+                "Encrypt Stellar secret keys with AES-256-GCM (master key from env var, never in code)",
+                "Integrate Stellar Anchor (MoneyGram Access, etc.) for USDC on/off ramp to fiat",
+                "Implement deposit webhook: poll Horizon for incoming USDC transactions to platform account",
+                "Write Soroban escrow contract in Rust: job_id, client, freelancer, amount, release_flag, dispute_flag",
+                "Compile Soroban contract to Wasm and deploy to testnet (store contract ID per environment)",
+                "Escrow lock transaction: on contract acceptance, transfer USDC from client wallet to contract address",
+                "Release payment: client approves → contract invoke release_to_freelancer → USDC transferred",
+                "Refund/dispute split: admin triggers partial or full refund via contract call (with auth check)",
+                "Transaction monitoring service: poll Horizon with exponential backoff (2s → 30s max)",
+                "Show user wallet balance: available USDC, pending escrow (locked), total balance",
+                "Withdrawal flow: user requests → platform sends USDC to Anchor address for fiat payout",
+                "Feature flag for mainnet: testnet/mainnet switch via environment variable",
+                "Retry logic with idempotency: failed submissions retry with same memo to prevent double-spend",
+                "Admin escrow dashboard: total locked in contracts, pending releases, daily volume metrics",
+                "Integration tests against Stellar testnet: full cycle deposit → escrow → release",
+                "Fee breakdown display: platform fee (%) + Stellar network fee (fixed, tiny) before confirmation",
+                "Add Soroban contract upgrade mechanism: store wasm hash, allow admin to point to new version",
+                "Implement custom auth in Soroban: ed25519 signature verification for contract calls",
+                "Add on-chain dispute status to contract: dispute flag auto-freezes all fund movement",
+                "Write deployment script for Soroban contract: compile, deploy, initialize, verify",
+                "Add support for Stellar claimable balances as fallback escrow for simpler flows",
+                "Gas estimation: estimate Soroban resource fees before submission, user pays minimal fee"
+            ]
+        }, {
+            id: "workspace",
+            icon: "💬",
+            title: "Project Workspace & Messaging",
+            color: "#B185FF",
+            guide: `<strong class="text-[#B185FF]">💬 Real-Time Workspace per Contract (Socket.io)</strong><br><br>
+        Every active contract gets a dedicated workspace. This is where all communication, file sharing, and work submission happens — organized in one place, not scattered across email and chat apps.<br><br>
+        <strong>Socket.io + NestJS:</strong> NestJS has first-class Socket.io support through <code>@nestjs/websockets</code>. Each contract gets its own Socket.io room. Messages are persisted to Postgres and emitted to all room members in real-time.<br><br>
+        <strong>Work Submission Flow:</strong> Freelancer submits work → system checks acceptance criteria checklist → client reviews each criterion → approve or request revision with specific notes. Each revision increments a counter (configurable max).`,
+            goals: [
+                "Create workspace route: /workspace/:contractId with authentication guard",
+                "Implement Socket.io NestJS gateway: rooms based on contractId, join on page load",
+                "Add file upload to Cloudflare R2: max 100MB, virus scan (ClamAV), generate preview thumbnails",
+                "Message read receipts: store last_seen timestamp per user, show 'Seen' status in UI",
+                "Push notifications: browser Notification API + email digests for unread messages (every 30 min)",
+                "Persistent project brief panel: always visible, shows acceptance criteria and deliverables",
+                "Freelancer 'Submit for Review' flow: attach files, add notes, confirm checklist completion",
+                "Client review interface: checkbox per acceptance criterion, approve all or request revision",
+                "Revision request: select which criteria are unmet, add detailed comment for each",
+                "Revision counter per contract: track revision count, enforce configurable max (default: 3)",
+                "Activity log: chronological feed of all events (messages, files, submissions, revisions, approvals)",
+                "Full-text search within workspace: search messages and file metadata using PostgreSQL tsvector",
+                "Image lightbox: click to enlarge, keyboard navigation (arrow keys), pinch-to-zoom on mobile",
+                "Emoji reactions on messages: quick feedback without typing (👍👎✅❓)",
+                "Integration test: submission → revision request → resubmission → final approval full cycle",
+                "Add typing indicators: real-time 'User is typing...' via Socket.io events",
+                "Mentions (@username): triggers notification for the mentioned user",
+                "Workspace export: download all messages and files as a ZIP archive",
+                "Add voice notes recording: browser MediaRecorder API, upload as audio file",
+                "Implement message edit & delete: within 5 minutes of sending, with edit history",
+                "Rate-limit messages: max 20 messages per minute per user (spam protection)"
+            ]
+        }, {
+            id: "disputes",
+            icon: "⚖️",
+            title: "Dispute Resolution",
+            color: "#FF5A6E",
+            guide: `<strong class="text-[#FF5A6E]">⚖️ 48h Revision Window → Hard 7-Day Admin Resolution → Auto-Split 50/50</strong><br><br>
+        Disputes are inevitable. The platform must handle them fairly, transparently, and quickly. The policy is published and agreed to at signup — no surprises.<br><br>
+        <strong>The Process:</strong> Freelancer submits work → client has 48h to request revisions → if client is unsatisfied after revisions, they can open a dispute → admin reviews within 7 days → if no decision after 7 days, auto-split 50/50.<br><br>
+        <strong>Escrow Freeze:</strong> When a dispute is opened, the Soroban contract's dispute flag is set, freezing all fund movement until resolution. This prevents either party from draining funds during the dispute.`,
+            goals: [
+                "Publish Dispute Resolution Policy as a static page, require agreement at signup",
+                "Enforce eligibility: dispute can only be opened after 48h revision window from last submission",
+                "Build dispute form: select unmet criteria, upload evidence (screenshots, chat logs, files)",
+                "Dispute state machine: open → under_review → resolved_client → resolved_freelancer → split → appealed",
+                "Create admin dispute interface: full context view (job, contract, chat, submissions, evidence)",
+                "Freeze escrow automatically when dispute opens: set dispute_flag in Soroban contract",
+                "Admin resolution actions: release 100% to freelancer, 100% refund to client, or custom % split",
+                "Automated email notifications on every status change to both parties",
+                "7-day timer: escalate to senior admin after 5 days of inactivity, auto-split at 7 days",
+                "Default 50/50 split: auto-execute via Soroban contract if no admin decision after 7 days",
+                "Store dispute outcome permanently on contract record for future reference",
+                "Display freelancer dispute rate on profile (only if above threshold: >10% of contracts)",
+                "Unit tests: eligibility logic (48h window), deadline enforcement, auto-split trigger",
+                "Add dispute appeal: 24h window to appeal admin decision with new evidence",
+                "Log all dispute evidence hashes on Stellar (transaction memo) for tamper-proof audit",
+                "Implement dispute analytics dashboard: open rate, resolution time, outcome distribution",
+                "Support conference call mediation link (Zoom/Google Meet integration)",
+                "Allow dispute withdrawal: if parties resolve independently, dispute can be closed",
+                "Add dispute fee: small fee to open dispute (refundable to winning party, prevents frivolous disputes)",
+                "Write end-to-end integration test: dispute opened → admin reviews → resolution → funds released"
+            ]
+        }, {
+            id: "reviews",
+            icon: "⭐",
+            title: "Reviews & Reputation",
+            color: "#F5B042",
+            guide: `<strong class="text-[#F5B042]">⭐ Double-Blind Reviews + Top Rated Badge</strong><br><br>
+        <strong>Double-Blind:</strong> Neither party can see the other's review until both have submitted OR 14 days have passed since contract completion. This prevents retaliation bias (e.g., "They gave me 3 stars so I'll give them 1").<br><br>
+        <strong>Top Rated Badge:</strong> Automatically awarded to freelancers with 4.8+ average rating across 10+ completed contracts. This badge is prominently displayed and unlocks premium features.`,
+            goals: [
+                "Review submission form: star rating (1-5), written review, skill-specific ratings (quality, communication, deadline)",
+                "Double-blind logic: hide review until both parties submit OR 14 days after contract completion",
+                "Eligibility check: only when contract status = completed, one review per party per contract",
+                "Display rating distribution histogram on freelancer profile (1-star to 5-star breakdown)",
+                "Reply feature: freelancer can post one public reply to any review",
+                "Client rating: clients also receive average ratings from freelancers they've worked with",
+                "Admin moderation queue: flag and remove reviews that violate policy (abusive, fake, off-topic)",
+                "Report review button: any user can flag a review for admin attention with a reason",
+                "Review analytics: average rating over time, improvement trend, rating by skill category",
+                "Top Rated badge: auto-assign to freelancers with 4.8+ avg and 10+ completed contracts",
+                "Reminder notifications: 24h and 72h after completion to leave a review",
+                "Integration tests: verify double-blind reveal logic with simulated time",
+                "Add review filtering: sort by newest, highest, lowest, most helpful",
+                "Weighted review score: recent reviews and higher-value contracts count more",
+                "External review import: optional LinkedIn recommendation import (with user consent)",
+                "Review response time tracking: how quickly freelancers respond to reviews",
+                "Add 'Verified Purchase' badge on reviews from completed contracts",
+                "Review sentiment summary: basic NLP to extract positive/neutral/negative themes",
+                "Export reviews as JSON: freelancers can use for their portfolio website",
+                "Implement review dispute: if a review violates content policy, it can be challenged"
+            ]
+        }, {
+            id: "admin",
+            icon: "🛡️",
+            title: "Admin Panel (Phase 1)",
+            color: "#FF5A6E",
+            guide: `<strong class="text-[#FF5A6E]">🛡️ Minimal but Essential Admin Controls</strong><br><br>
+        The admin panel is the <strong>trust and safety layer</strong>. Early-stage marketplaces need human oversight. Don't overbuild — focus on essential moderation and monitoring tools.<br><br>
+        <strong>Key Sections:</strong> Dashboard (metrics at a glance), User Management (suspend/ban/verify), Job Moderation (flag/remove spam), Dispute Center (review and resolve), Escrow Monitoring (track locked funds), Review Moderation (handle reports).`,
+            goals: [
+                "Admin authentication: separate admin login route, 2FA enforced, admin role guard on all routes",
+                "Dashboard: total users, active contracts, open disputes, escrow balance, daily signups, revenue",
+                "User management table: search, filter by role/status/verification, sort by any column",
+                "User suspension: block login, show suspended message, preserve all data",
+                "Permanent ban: full account freeze with audit log entry and email notification",
+                "Job post moderation: list flagged/suspicious posts, approve or remove with reason sent to poster",
+                "Dispute center: all open disputes sorted by age (oldest first), with urgency indicators",
+                "Dispute detail view: full context including job, contract, chat history, submissions, evidence files",
+                "Resolution actions: release to freelancer, refund to client, or custom split (with audit trail)",
+                "Verification request queue: pending Tier2 submissions with document preview, approve/reject",
+                "Review moderation: reported reviews with context, option to remove or dismiss report",
+                "Platform activity feed: real-time stream of signups, contracts, disputes, completions",
+                "Admin action audit log: every admin action with actor, target, timestamp, details",
+                "Basic revenue reporting: fees collected (daily, weekly, monthly) with export to CSV",
+                "Escrow monitoring: total held, per-contract breakdown, pending releases, transaction history",
+                "Integration tests: verify admin role check on all admin routes, test all actions",
+                "Add global search: search across users, jobs, disputes, and contracts from one input",
+                "Implement admin notes: private notes on user accounts visible only to other admins",
+                "Support batch actions: select multiple users for bulk suspend/verify",
+                "Export admin logs to CSV: filterable by date range, action type, and actor",
+                "Add Stellar network health status widget: Horizon status, Soroban RPC status, latest ledger"
+            ]
+        }, {
+            id: "devops",
+            icon: "⚙️",
+            title: "DevOps & Deployment",
+            color: "#00C8E8",
+            guide: `<strong class="text-[#00C8E8]">🐳 Docker Compose → CI/CD → Zero-Downtime Deploy</strong><br><br>
+        Stage 1 runs on a single VPS with Docker Compose. The frontend (Next.js) is deployed on Vercel. The backend (NestJS) runs on the VPS behind Cloudflare proxy. This keeps costs low while maintaining professional infrastructure.<br><br>
+        <strong>Future Scaling:</strong> When traffic grows, individual services can be extracted into their own Docker images and deployed to separate servers (or AWS ECS). The Nx monorepo structure makes this extraction clean because service boundaries are already defined.`,
+            goals: [
+                "Write production Dockerfile for NestJS: multi-stage build (build stage + production stage)",
+                "Create docker-compose.prod.yml: NestJS, Postgres, Redis, Nginx reverse proxy",
+                "Setup GitHub Actions workflow: on push to main → build → test → deploy to VPS via SSH",
+                "Configure Cloudflare R2 for static asset storage (user uploads, portfolio images)",
+                "Implement automated database backup: pg_dump nightly, upload to R2 with 30-day retention",
+                "Add basic Prometheus metrics endpoint: request count, response times, error rates",
+                "Setup uptime monitoring: health endpoint pinged every 60s from external service",
+                "Configure log rotation and centralized logging: send structured logs to BetterStack/Logtail",
+                "Add staging environment: separate VPS or Docker Compose instance that mirrors production",
+                "Write .env.example with all required variables and clear descriptions",
+                "Implement migration runner: auto-run Prisma migrations on container startup",
+                "Add IP-based rate limiting using Redis: 100 requests/minute per IP for public endpoints",
+                "Setup SSL via Let's Encrypt (Certbot) with auto-renewal cron job",
+                "Add maintenance mode middleware: returns 503 with custom message, toggle via env var",
+                "Write deployment runbook: step-by-step guide for deploying, rolling back, and debugging",
+                "Add Sentry.io integration for error tracking with source maps",
+                "Implement feature flags: simple boolean flags in database, no external service needed for Phase 1",
+                "Setup database connection pooling: PgBouncer in front of Postgres for connection management",
+                "Add API gateway rate limiting: per-user limits (1000 req/hour for authenticated users)",
+                "Write smoke tests: run after every deploy to verify critical paths work",
+                "Add Slack/Discord webhook alerts for critical errors (500 spikes, database connection failures)"
+            ]
+        }, {
+            id: "testing",
+            icon: "🧪",
+            title: "Testing & Security",
+            color: "#2AD4A0",
+            guide: `<strong class="text-[#2AD4A0]">🔒 Comprehensive Testing + Security Hardening</strong><br><br>
+        <strong>Testing Pyramid:</strong> Unit tests (fast, many) → Integration tests (API endpoints) → E2E tests (critical user flows). Plus Stellar-specific contract tests and security scanning.<br><br>
+        <strong>Security First:</strong> The platform handles money and personal data. Security is not optional. Every endpoint must be authenticated where appropriate. Every input must be validated. Secrets must never be in code or client bundles.`,
+            goals: [
+                "Write unit tests for all services: Jest, coverage target >80%, run on every commit",
+                "Integration tests for all API endpoints: supertest + test database, test all status codes",
+                "E2E tests with Playwright: signup → create profile → post job → apply → hire → complete flow",
+                "Stellar testnet integration tests: deposit USDC → lock in escrow → release → verify on ledger",
+                "Security scanning: npm audit on every PR, Snyk for dependency vulnerabilities, Dependabot enabled",
+                "Add CSRF protection, XSS prevention headers (Content-Security-Policy), and HSTS",
+                "SQL injection prevention: always use Prisma parameterized queries, never raw string interpolation",
+                "Rate limiting & brute force protection: Redis-backed, per-endpoint configurable limits",
+                "JWT secret rotation mechanism: support multiple valid secrets during rotation window",
+                "Add audit logs for all sensitive operations: database triggers or service-level logging",
+                "Implement API request validation: every DTO validated with Zod before processing",
+                "Run OWASP ZAP baseline scan in CI pipeline on the staging environment",
+                "Add secrets scanning pre-commit hook: gitleaks to prevent accidental secret commits",
+                "Write contract tests for Soroban: test every contract method with various inputs",
+                "Test dispute auto-split: use Jest fake timers to simulate the 7-day deadline",
+                "Load testing with k6: basic scenarios (100 concurrent users, job browsing, proposal submission)",
+                "Accessibility tests: axe-core in Playwright E2E tests, target WCAG AA compliance",
+                "Test passkey flows across browsers: Playwright with WebAuthn emulation",
+                "Add mutation testing with Stryker: verify test quality by mutating code",
+                "Write security policy and vulnerability disclosure contact (SECURITY.md in repo)"
+            ]
+        }];
+
+        // ──────────────────────────────────────────────
+        // STATE MANAGEMENT
+        // ──────────────────────────────────────────────
+        const STORAGE_KEY = 'frestell_phase1_ultimate_v2';
+        let totalGoals = 0;
+        categories.forEach(c => totalGoals += c.goals.length);
+        let state = {};
+        try {
+            state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        } catch (e) { state = {}; }
+
+        function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+        function getDone() { return Object.values(state).filter(v => v === true).length; }
+
+        function updateAllStats() {
+            const done = getDone();
+            const pct = totalGoals ? Math.round((done / totalGoals) * 100) : 0;
+            const fillEl = document.getElementById('globalProgressFill');
+            if (fillEl) fillEl.style.width = `${pct}%`;
+            const pctEl = document.getElementById('progressPercent');
+            if (pctEl) pctEl.innerText = `${pct}%`;
+            const countEl = document.getElementById('countDisplay');
+            if (countEl) countEl.innerText = `${done}/${totalGoals}`;
+            const statDoneEl = document.getElementById('statDone');
+            if (statDoneEl) statDoneEl.innerText = done;
+            const statRemainingEl = document.getElementById('statRemaining');
+            if (statRemainingEl) statRemainingEl.innerText = totalGoals - done;
+            const bannerEl = document.getElementById('completedBanner');
+            if (bannerEl) {
+                if (done === totalGoals) bannerEl.classList.remove('hidden');
+                else bannerEl.classList.add('hidden');
+            }
+        }
+
+        // ──────────────────────────────────────────────
+        // MODAL MANAGEMENT
+        // ──────────────────────────────────────────────
+        function openModal(goalText, catId, catTitle, idx) {
+            const meta = generateGoalMeta(goalText, catId, idx);
+            const overlay = document.getElementById('modalOverlay');
+            const content = document.getElementById('modalContent');
+            const complexityClass = {
+                'Easy': 'badge-easy',
+                'Medium': 'badge-medium',
+                'Hard': 'badge-hard',
+                'Expert': 'badge-expert'
+            } [meta.complexity] || 'badge-medium';
+
+            let html = `
+            <div class="flex items-center justify-between mb-4">
+              <span class="badge ${complexityClass}">${meta.complexity}</span>
+              ${meta.stellarNote ? '<span class="badge badge-expert">⭐ STELLAR</span>' : ''}
+              <button onclick="document.getElementById('modalOverlay').classList.add('hidden')" class="text-gray-400 hover:text-white text-xl leading-none">&times;</button>
+            </div>
+            <h3 class="mb-2">${goalText}</h3>
+            <div class="text-xs text-gray-400 mb-4 mono">${catTitle} · Goal #${idx+1}</div>
+            <div class="text-sm text-gray-200 leading-relaxed mb-5">${meta.explanation}</div>
+            ${meta.codeSnippet ? `<div class="mb-5"><div class="text-xs text-gray-400 mb-1 mono">📝 CODE REFERENCE</div><pre><code>${escapeHTML(meta.codeSnippet)}</code></pre></div>` : ''}
+            <div class="mb-4">
+              <div class="text-xs font-bold text-[#2AD4A0] mb-2 mono">✅ RIGHT APPROACHES</div>
+              <ul class="text-sm text-gray-300 space-y-1.5">${meta.approaches.map(a => `<li>${a}</li>`).join('')}</ul>
+            </div>
+            <div class="mb-4">
+              <div class="text-xs font-bold text-[#FF5A6E] mb-2 mono">⚠️ THINGS TO AVOID</div>
+              <ul class="text-sm text-gray-300 space-y-1.5">${meta.pitfalls.map(p => `<li>${p}</li>`).join('')}</ul>
+            </div>
+            <div class="flex gap-3 flex-wrap">
+              <button onclick="copyGoalText('${escapeAttr(goalText)}')" class="copy-btn px-4 py-2 bg-[#00C8E8]/15 border border-[#00C8E8]/40 rounded-full text-sm hover:bg-[#00C8E8]/30 transition mono">
+                📋 Copy Task
+              </button>
+              <button onclick="searchGoogle('${escapeAttr(goalText)}')" class="px-4 py-2 bg-gray-800 border border-gray-600 rounded-full text-sm hover:border-[#00C8E8] transition mono">
+                🔍 Search Google
+              </button>
+              <button onclick="document.getElementById('modalOverlay').classList.add('hidden')" class="px-4 py-2 bg-gray-800 border border-gray-600 rounded-full text-sm hover:border-gray-400 transition mono">
+                Close
+              </button>
+            </div>`;
+            content.innerHTML = html;
+            overlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(e) {
+            if (e.target === document.getElementById('modalOverlay') || !e.target) {
+                document.getElementById('modalOverlay').classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function escapeHTML(str) { const div = document.createElement('div');
+            div.textContent = str; return div.innerHTML; }
+
+        function escapeAttr(str) { return str.replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, ' '); }
+
+        // Expose to global scope for onclick handlers
+        window.copyGoalText = function(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('toast');
+                toast.style.opacity = '1';
+                toast.style.pointerEvents = 'auto';
+                setTimeout(() => { toast.style.opacity = '0';
+                    toast.style.pointerEvents = 'none'; }, 1800);
+            });
+        };
+        window.searchGoogle = function(text) {
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(text)}`, '_blank');
+        };
+        window.closeModal = closeModal;
+        window.openModal = openModal;
+
+        // ──────────────────────────────────────────────
+        // RENDERING
+        // ──────────────────────────────────────────────
+        function renderNav() {
+            const desktopNav = document.getElementById('catNavList');
+            const mobileNav = document.getElementById('mobileNavList');
+            if (desktopNav) {
+                desktopNav.innerHTML = '';
+                const allBtn = document.createElement('button');
+                allBtn.innerText = '📌 ALL';
+                allBtn.className =
+                    'px-3 py-1 text-xs rounded-full bg-[#00C8E8] text-black font-bold whitespace-nowrap';
+                allBtn.onclick = () => {
+                    document.querySelectorAll('.category-section').forEach(s => s.style.display = 'block');
+                    document.querySelectorAll('.cat-nav-btn').forEach(b => b.classList.remove('bg-[#00C8E8]',
+                        'text-black'));
+                    allBtn.classList.add('bg-[#00C8E8]', 'text-black');
+                };
+                desktopNav.appendChild(allBtn);
+                categories.forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.innerText = `${cat.icon} ${cat.title.split(' ')[0]}`;
+                    btn.className =
+                        'cat-nav-btn px-3 py-1 text-xs rounded-full bg-gray-800 hover:bg-gray-700 transition whitespace-nowrap';
+                    btn.onclick = () => {
+                        document.querySelectorAll('.category-section').forEach(s => s.style.display = s
+                            .dataset.catId === cat.id ? 'block' : 'none');
+                        document.querySelectorAll('.cat-nav-btn').forEach(b => b.classList.remove(
+                            'bg-[#00C8E8]', 'text-black'));
+                        btn.classList.add('bg-[#00C8E8]', 'text-black');
+                        const section = document.querySelector(`[data-cat-id="${cat.id}"]`);
+                        if (section) section.scrollIntoView({ behavior: 'smooth' });
+                    };
+                    desktopNav.appendChild(btn);
+                });
+            }
+            if (mobileNav) {
+                mobileNav.innerHTML = '';
+                const allMBtn = document.createElement('button');
+                allMBtn.innerText = '📌 Show All Categories';
+                allMBtn.className =
+                    'text-left px-3 py-2 rounded-lg hover:bg-gray-800 transition text-sm w-full';
+                allMBtn.onclick = () => {
+                    document.querySelectorAll('.category-section').forEach(s => s.style.display = 'block');
+                    closeMobileMenu();
+                };
+                mobileNav.appendChild(allMBtn);
+                categories.forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.innerText = `${cat.icon} ${cat.title}`;
+                    btn.className =
+                        'text-left px-3 py-2 rounded-lg hover:bg-gray-800 transition text-sm w-full';
+                    btn.onclick = () => {
+                        document.querySelectorAll('.category-section').forEach(s => s.style.display = s
+                            .dataset.catId === cat.id ? 'block' : 'none');
+                        closeMobileMenu();
+                        const section = document.querySelector(`[data-cat-id="${cat.id}"]`);
+                        if (section) setTimeout(() => section.scrollIntoView({ behavior: 'smooth' }),
+                            350);
+                    };
+                    mobileNav.appendChild(btn);
+                });
+            }
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('open');
+            document.getElementById('mobileBackdrop').classList.remove('show');
+            document.getElementById('hamburgerBtn').classList.remove('hamburger-open');
+            document.body.style.overflow = '';
+        }
+
+        function renderContent() {
+            const main = document.getElementById('mainContent');
+            if (!main) return;
+            main.innerHTML = '';
+            categories.forEach(cat => {
+                const doneCount = cat.goals.filter((_, i) => state[`${cat.id}_${i}`]).length;
+                const percent = Math.round((doneCount / cat.goals.length) * 100);
+                const section = document.createElement('section');
+                section.className = 'category-section mb-12';
+                section.dataset.catId = cat.id;
+                section.innerHTML = `
+              <div class="flex items-center gap-3 border-b border-[#00C8E8]/30 pb-3 mb-4">
+                <div class="text-3xl">${cat.icon}</div>
+                <div>
+                  <h2 class="text-xl sm:text-2xl font-bold">${cat.title}</h2>
+                  <div class="mono text-xs text-gray-400">${doneCount}/${cat.goals.length} tasks · ${percent}% complete</div>
+                </div>
+              </div>
+              <div class="bg-[#0B111A]/80 border border-[#00C8E8]/20 rounded-xl p-4 sm:p-5 mb-6">
+                <div class="text-sm text-gray-300 leading-relaxed max-w-none">${cat.guide}</div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="grid-${cat.id}"></div>`;
+                main.appendChild(section);
+                const grid = document.getElementById(`grid-${cat.id}`);
+                if (!grid) return;
+                cat.goals.forEach((goal, idx) => {
+                    const key = `${cat.id}_${idx}`;
+                    const isDone = !!state[key];
+                    const goalDiv = document.createElement('div');
+                    goalDiv.className =
+                        `flex items-start gap-3 p-3 rounded-xl border transition cursor-pointer goal-item ${isDone ? 'bg-[#2AD4A0]/10 border-[#2AD4A0]/30' : 'bg-[#0F1622] border-gray-800 hover:border-[#00C8E8]/50'}`;
+                    goalDiv.dataset.goalKey = key;
+                    goalDiv.dataset.goalText = goal;
+                    goalDiv.dataset.catId = cat.id;
+                    goalDiv.dataset.catTitle = cat.title;
+                    goalDiv.dataset.idx = idx;
+                    goalDiv.innerHTML = `
+                <div class="w-5 h-5 rounded-md border-2 flex-shrink-0 mt-0.5 flex items-center justify-center goal-check ${isDone ? 'bg-[#2AD4A0] border-[#2AD4A0]' : 'border-gray-500'}">
+                  ${isDone ? '<svg class="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>' : ''}
+                </div>
+                <div class="text-sm text-gray-200 flex-1">${goal}</div>
+                <button class="info-btn text-gray-500 hover:text-[#00C8E8] transition flex-shrink-0 ml-1" title="View details" data-goal-text="${escapeAttr(goal)}" data-cat-id="${cat.id}" data-cat-title="${escapeAttr(cat.title)}" data-idx="${idx}">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"></circle><path stroke-linecap="round" stroke-width="2" d="M12 16v-4M12 8h.01"></path></svg>
+                </button>`;
+                    // Click on the main area toggles completion
+                    goalDiv.addEventListener('click', function(e) {
+                        if (e.target.closest('.info-btn')) return; // Don't toggle if info button clicked
+                        state[key] = !state[key];
+                        saveState();
+                        renderContent();
+                        renderNav();
+                        updateAllStats();
+                    });
+                    // Click on the info button opens modal
+                    const infoBtn = goalDiv.querySelector('.info-btn');
+                    if (infoBtn) {
+                        infoBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const gText = this.dataset.goalText;
+                            const cId = this.dataset.catId;
+                            const cTitle = this.dataset.catTitle;
+                            const iIdx = parseInt(this.dataset.idx);
+                            openModal(gText, cId, cTitle, iIdx);
+                        });
+                    }
+                    grid.appendChild(goalDiv);
+                });
+            });
+            updateAllStats();
+        }
+
+        // ──────────────────────────────────────────────
+        // SEARCH FUNCTIONALITY
+        // ──────────────────────────────────────────────
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const googleBtn = document.getElementById('googleSearchBtn');
+            if (!searchInput) return;
+
+            searchInput.addEventListener('input', function() {
+                const query = this.value.trim().toLowerCase();
+                // Clear previous highlights
+                document.querySelectorAll('.goal-highlight').forEach(el => el.classList.remove(
+                    'goal-highlight'));
+                document.querySelectorAll('.category-section').forEach(s => s.style.display = 'block');
+
+                if (!query) return;
+
+                // Find matching goals
+                const allGoals = document.querySelectorAll('.goal-item');
+                let matchCount = 0;
+                const matchedCategories = new Set();
+
+                allGoals.forEach(goal => {
+                    const text = (goal.dataset.goalText || '').toLowerCase();
+                    if (text.includes(query)) {
+                        goal.classList.add('goal-highlight');
+                        goal.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        matchedCategories.add(goal.dataset.catId);
+                        matchCount++;
+                    }
+                });
+
+                // Optionally collapse non-matching categories
+                if (matchCount > 0 && query.length > 2) {
+                    document.querySelectorAll('.category-section').forEach(s => {
+                        if (!matchedCategories.has(s.dataset.catId)) {
+                            s.style.display = 'none';
+                        }
+                    });
+                }
+            });
+
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    const query = this.value.trim();
+                    if (query) {
+                        window.open(`https://www.google.com/search?q=${encodeURIComponent(query + ' site:developers.stellar.org OR stellar soroban')}`,
+                            '_blank');
+                    }
+                }
+            });
+
+            if (googleBtn) {
+                googleBtn.addEventListener('click', function() {
+                    const query = searchInput.value.trim();
+                    if (query) {
+                        window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+                    } else {
+                        window.open('https://www.google.com/search?q=Stellar+Soroban+smart+contract+escrow+tutorial',
+                            '_blank');
+                    }
+                });
+            }
+        }
+
+        // ──────────────────────────────────────────────
+        // MOBILE MENU
+        // ──────────────────────────────────────────────
+        function setupMobileMenu() {
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const backdrop = document.getElementById('mobileBackdrop');
+            const mobileResetBtn = document.getElementById('mobileResetBtn');
+
+            if (hamburgerBtn && mobileMenu && backdrop) {
+                hamburgerBtn.addEventListener('click', () => {
+                    const isOpen = mobileMenu.classList.contains('open');
+                    if (isOpen) {
+                        closeMobileMenu();
+                    } else {
+                        mobileMenu.classList.add('open');
+                        backdrop.classList.add('show');
+                        hamburgerBtn.classList.add('hamburger-open');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+                backdrop.addEventListener('click', closeMobileMenu);
+            }
+            if (mobileResetBtn) {
+                mobileResetBtn.addEventListener('click', () => {
+                    if (confirm('Wipe all progress? This cannot be undone.')) {
+                        state = {};
+                        saveState();
+                        renderContent();
+                        renderNav();
+                        updateAllStats();
+                        closeMobileMenu();
+                    }
+                });
+            }
+            // Close mobile menu on Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const menu = document.getElementById('mobileMenu');
+                    if (menu && menu.classList.contains('open')) {
+                        closeMobileMenu();
+                    }
+                    const modal = document.getElementById('modalOverlay');
+                    if (modal && !modal.classList.contains('hidden')) {
+                        modal.classList.add('hidden');
+                        document.body.style.overflow = '';
+                    }
+                }
+            });
+        }
+
+        // ──────────────────────────────────────────────
+        // RESET BUTTON
+        // ──────────────────────────────────────────────
+        function setupReset() {
+            const resetBtn = document.getElementById('resetBtn');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    if (confirm('Wipe all progress? This cannot be undone.')) {
+                        state = {};
+                        saveState();
+                        renderContent();
+                        renderNav();
+                        updateAllStats();
+                    }
+                });
+            }
+        }
+
+        // ──────────────────────────────────────────────
+        // INITIALIZATION
+        // ──────────────────────────────────────────────
+        function init() {
+            renderNav();
+            renderContent();
+            setupSearch();
+            setupMobileMenu();
+            setupReset();
+            updateAllStats();
+
+            // Log helpful info
+            console.log(`🚀 FreStell Phase 1 Guide loaded: ${totalGoals} goals across ${categories.length} categories`);
+            console.log('💡 Click any goal to toggle completion. Click the ℹ️ icon for detailed explanations.');
+            console.log('🔍 Use the search bar to find goals or search Google for terms.');
+            console.log('⭐ Goals marked "EXPERT" involve Stellar/Soroban, passkeys, or advanced security.');
+        }
+
+        // Start the app
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+</script>
+</body>
+</html>

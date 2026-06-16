@@ -1,0 +1,717 @@
+// FreStell — Prisma schema
+// Models: User, Passkey, Job, Proposal, Escrow, Message, Conversation, AIDraft, AuditLog
+// Notes:
+//  - All money stored as Decimal strings (avoid float precision loss).
+//  - Enums are explicit so contracts can map directly to TS unions in @frestell/shared.
+//  - All timestamp columns are UTC; we never store local time.
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =====================================================================
+// Auth & identity
+// =====================================================================
+
+enum VerificationTier {
+  email
+  government_id
+  badges
+}
+
+enum AuthProviderKind {
+  webauthn
+  oauth
+  email_magic_link
+}
+
+model User {
+  id              String           @id @default(uuid()) @db.Uuid
+  email           String           @unique
+  emailVerifiedAt DateTime?
+  displayName     String?
+  passwordHash    String?
+  googleId        String?          @unique
+  stellarAddress  String?          @unique
+  role            UserRole         @default(freelancer)
+  tier            VerificationTier @default(email)
+
+  // Email verification
+  verificationTokenHash String?
+
+  // 2FA
+  totpSecret      String?
+  totpEnabled     Boolean          @default(false)
+  totpVerifiedAt  DateTime?
+
+  // Email change OTP
+  emailChangeOtp        String?
+  emailChangeOtpExpires DateTime?
+  emailChangeNewEmail   String?
+
+  // Lockout
+  lockedUntil     DateTime?
+  failedAttempts  Int              @default(0)
+
+  // Soft delete
+  deletedAt       DateTime?
+  restoreUntil    DateTime?
+
+  // Profile
+  slug                String?              @unique
+  bio                 String?
+  avatarUrl           String?
+  title               String?
+  timezone            String?
+  location            String?
+  availabilityStatus  String               @default("available")
+  profileVisibility   String               @default("public")
+  hourlyRate          Decimal?             @db.Decimal(10, 2)
+  companyName         String?
+  companyIndustry     String?
+  companySize         String?
+  website             String?
+
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+
+  passkeys        Passkey[]
+  sessions        Session[]
+  identities      Identity[]
+  twoFactors      TwoFactor[]
+  recoveryCodes   RecoveryCode[]
+  passwordResets  PasswordReset[]
+  loginAttempts   LoginAttempt[]
+
+  jobsAsClient  Job[]             @relation("ClientJobs")
+  jobsAsFreelancer Job[]          @relation("FreelancerJobs")
+  proposals     Proposal[]
+  escrowsFunded Escrow[]          @relation("EscrowFunder")
+  conversations ConversationParticipant[]
+  messages      Message[]
+  aiDrafts      AIDraft[]
+  verifications Verification[]
+  auditLogs     AuditLog[]
+
+  // Profile relations
+  portfolioItems  PortfolioItem[]
+  serviceOfferings ServiceOffering[]
+  skills          UserSkill[]
+  endorsementsGiven  SkillEndorsement[]   @relation("EndorsementsGiven")
+  endorsementsReceived SkillEndorsement[] @relation("EndorsementsReceived")
+  socialLinks     SocialLink[]
+  profileViews    ProfileView[]          @relation("ProfileViews")
+  profileViewers  ProfileView[]          @relation("ProfileViewers")
+
+  @@index([createdAt])
+  @@index([tier])
+  @@map("users")
+}
+
+enum UserRole {
+  freelancer
+  client
+  admin
+}
+
+model Identity {
+  id           String           @id @default(uuid()) @db.Uuid
+  userId       String           @db.Uuid
+  provider     AuthProviderKind
+  providerSub  String
+  metadata     Json?
+  createdAt    DateTime         @default(now())
+
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerSub])
+  @@index([userId])
+  @@map("identities")
+}
+
+model Passkey {
+  id              String   @id @default(uuid()) @db.Uuid
+  userId          String   @db.Uuid
+  credentialId    String   @unique
+  publicKey       Bytes
+  counter         BigInt   @default(0)
+  transports      String[]
+  name            String?
+  createdAt       DateTime @default(now())
+  lastUsedAt      DateTime?
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("passkeys")
+}
+
+model Session {
+  id              String    @id @default(uuid()) @db.Uuid
+  userId          String    @db.Uuid
+  familyId        String    @db.Uuid
+  tokenHash       String
+  deviceInfo      String?
+  ip              String?
+  userAgent       String?
+  expiresAt       DateTime
+  createdAt       DateTime  @default(now())
+  revokedAt       DateTime?
+
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([familyId])
+  @@index([tokenHash])
+  @@map("sessions")
+}
+
+model TwoFactor {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  type      String   @default("totp")
+  secret    String
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("two_factors")
+}
+
+model RecoveryCode {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  codeHash  String
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("recovery_codes")
+}
+
+model PasswordReset {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  tokenHash String
+  usedAt    DateTime?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tokenHash])
+  @@index([userId])
+  @@map("password_resets")
+}
+
+model LoginAttempt {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String?  @db.Uuid
+  email     String?
+  ip        String
+  userAgent String?
+  success   Boolean
+  reason    String?
+  createdAt DateTime @default(now())
+
+  user      User?    @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+  @@index([ip, createdAt])
+  @@index([email, createdAt])
+  @@map("login_attempts")
+}
+
+model Verification {
+  id            String           @id @default(uuid()) @db.Uuid
+  userId        String           @db.Uuid
+  tier          VerificationTier
+  status        VerificationStatus @default(pending)
+  documentType  String?
+  documentHash  String?
+  reviewerId    String?          @db.Uuid
+  reviewedAt    DateTime?
+  rejectionReason String?
+  createdAt     DateTime         @default(now())
+
+  user          User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, tier])
+  @@index([status])
+  @@map("verifications")
+}
+
+enum VerificationStatus {
+  pending
+  approved
+  rejected
+}
+
+// =====================================================================
+// Profiles
+// =====================================================================
+
+model PortfolioItem {
+  id             String    @id @default(uuid()) @db.Uuid
+  userId         String    @db.Uuid
+  title          String
+  description    String?
+  images         String[]
+  liveUrl        String?
+  githubUrl      String?
+  completionDate DateTime?
+  sortOrder      Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("portfolio_items")
+}
+
+model ServiceOffering {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @db.Uuid
+  title       String
+  description String?
+  rateMin     Decimal  @db.Decimal(10, 2)
+  rateMax     Decimal? @db.Decimal(10, 2)
+  currency    String   @default("USD")
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("service_offerings")
+}
+
+model Skill {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique
+  category  String
+  createdAt DateTime @default(now())
+
+  users     UserSkill[]
+  endorsements SkillEndorsement[]
+
+  @@index([name])
+  @@index([category])
+  @@map("skills")
+}
+
+model UserSkill {
+  userId      String   @db.Uuid
+  skillId     String   @db.Uuid
+  endorsements Int     @default(0)
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill       Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([userId, skillId])
+  @@index([skillId])
+  @@map("user_skills")
+}
+
+model SkillEndorsement {
+  id              String   @id @default(uuid()) @db.Uuid
+  skillId         String   @db.Uuid
+  endorsedById    String   @db.Uuid
+  endorsedUserId  String   @db.Uuid
+  createdAt       DateTime @default(now())
+
+  skill           Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  endorser        User     @relation("EndorsementsGiven", fields: [endorsedById], references: [id], onDelete: Cascade)
+  endorsedUser    User     @relation("EndorsementsReceived", fields: [endorsedUserId], references: [id], onDelete: Cascade)
+
+  @@unique([skillId, endorsedById, endorsedUserId])
+  @@index([endorsedUserId])
+  @@map("skill_endorsements")
+}
+
+model SocialLink {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  type      String   // github, linkedin, twitter, website
+  url       String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, type])
+  @@index([userId])
+  @@map("social_links")
+}
+
+model ProfileView {
+  id        String   @id @default(uuid()) @db.Uuid
+  viewedId  String   @db.Uuid
+  viewerId  String?  @db.Uuid
+  ip        String?
+  createdAt DateTime @default(now())
+
+  viewed    User     @relation("ProfileViews", fields: [viewedId], references: [id], onDelete: Cascade)
+  viewer    User?    @relation("ProfileViewers", fields: [viewerId], references: [id])
+
+  @@index([viewedId, createdAt])
+  @@index([viewerId])
+  @@map("profile_views")
+}
+
+enum JobStatus {
+  draft
+  review
+  active
+  in_progress
+  completed
+  archived
+  cancelled
+}
+
+enum BudgetType {
+  fixed
+  milestone
+  hourly
+}
+
+enum AssetCode {
+  XLM
+  USDC
+}
+
+model Job {
+  id          String   @id @default(uuid()) @db.Uuid
+  clientId    String   @db.Uuid
+  freelancerId String? @db.Uuid
+  title       String
+  description String
+  budgetType  BudgetType @default(fixed)
+  budgetAmount Decimal  @db.Decimal(20, 7)
+  budgetAsset AssetCode @default(USDC)
+  budgetHoursMin Decimal? @db.Decimal(10, 2)
+  budgetHoursMax Decimal? @db.Decimal(10, 2)
+  status      JobStatus @default(draft)
+  visibility  String   @default("public")
+  categoryId  String?  @db.Uuid
+  applicationLimit Int? @default(50)
+  expiresAt   DateTime?
+  deadline    DateTime?
+  tags        String[]
+  spamFlags   String[]
+  expiryReminderSent Boolean @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+  completedAt DateTime?
+
+  client      User      @relation("ClientJobs", fields: [clientId], references: [id])
+  freelancer  User?     @relation("FreelancerJobs", fields: [freelancerId], references: [id])
+  category    JobCategory? @relation(fields: [categoryId], references: [id])
+  criteria    AcceptanceCriterion[]
+  milestones  Milestone[]
+  proposals   Proposal[]
+  changes     JobChange[]
+  attachments JobAttachment[]
+  escrows     Escrow[]
+  messages    Message[]
+  aiDrafts    AIDraft[]
+  views       JobView[]
+
+   @@index([status, publishedAt])
+   @@index([clientId])
+   @@index([freelancerId])
+   @@index([categoryId])
+   @@map("jobs")
+}
+
+model JobView {
+  id        String   @id @default(uuid()) @db.Uuid
+  jobId     String   @db.Uuid
+  viewerId  String?  @db.Uuid
+  createdAt DateTime @default(now())
+
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId, createdAt])
+  @@map("job_views")
+}
+
+model AcceptanceCriterion {
+  id          String  @id @default(uuid()) @db.Uuid
+  jobId       String  @db.Uuid
+  description String
+  done        Boolean @default(false)
+  position    Int     @default(0)
+
+  job         Job     @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+  @@map("acceptance_criteria")
+}
+
+enum MilestoneStatus {
+  pending
+  active
+  completed
+  cancelled
+}
+
+model Milestone {
+  id          String          @id @default(uuid()) @db.Uuid
+  jobId       String          @db.Uuid
+  title       String
+  description String?
+  amount      Decimal         @db.Decimal(20, 7)
+  dueDate     DateTime?
+  position    Int             @default(0)
+  status      MilestoneStatus @default(pending)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  job         Job             @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+  @@map("milestones")
+}
+
+model JobCategory {
+  id          String        @id @default(uuid()) @db.Uuid
+  name        String
+  slug        String        @unique
+  description String?
+  icon        String?
+  parentId    String?       @db.Uuid
+  level       Int           @default(0)
+  sortOrder   Int           @default(0)
+  createdAt   DateTime      @default(now())
+
+  parent      JobCategory?  @relation("CategoryParent", fields: [parentId], references: [id])
+  children    JobCategory[] @relation("CategoryParent")
+  jobs        Job[]
+
+  @@index([parentId])
+  @@index([slug])
+  @@index([level])
+  @@map("job_categories")
+}
+
+model JobChange {
+  id        String   @id @default(uuid()) @db.Uuid
+  jobId     String   @db.Uuid
+  field     String
+  oldValue  String?
+  newValue  String?
+  changedBy String   @db.Uuid
+  createdAt DateTime @default(now())
+
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId, createdAt])
+  @@map("job_changes")
+}
+
+model JobAttachment {
+  id          String   @id @default(uuid()) @db.Uuid
+  jobId       String   @db.Uuid
+  fileName    String
+  originalName String
+  mimeType    String
+  size        Int
+  storagePath String
+  uploadedBy  String   @db.Uuid
+  createdAt   DateTime @default(now())
+
+  job         Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+  @@map("job_attachments")
+}
+
+enum ProposalStatus {
+  submitted
+  shortlisted
+  rejected
+  accepted
+  withdrawn
+}
+
+model Proposal {
+  id           String         @id @default(uuid()) @db.Uuid
+  jobId        String         @db.Uuid
+  freelancerId String         @db.Uuid
+  body         String
+  bidAmount    Decimal        @db.Decimal(20, 7)
+  bidAsset     AssetCode
+  status       ProposalStatus @default(submitted)
+  submittedAt  DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  job          Job            @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  freelancer   User           @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, freelancerId])
+  @@index([jobId, status])
+  @@map("proposals")
+}
+
+// =====================================================================
+// Payments & escrow
+// =====================================================================
+
+enum EscrowStatus {
+  pending
+  funded
+  released
+  refunded
+  disputed
+}
+
+model Escrow {
+  id              String       @id @default(uuid()) @db.Uuid
+  jobId           String       @db.Uuid
+  funderId        String       @db.Uuid
+  contractId      String
+  amount          Decimal      @db.Decimal(20, 7)
+  asset           AssetCode
+  status          EscrowStatus @default(pending)
+  fundTxHash      String?
+  releaseTxHash   String?
+  refundTxHash    String?
+  fundedAt        DateTime?
+  releasedAt      DateTime?
+  refundedAt      DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  job             Job          @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  funder          User         @relation("EscrowFunder", fields: [funderId], references: [id])
+  events          EscrowEvent[]
+
+  @@index([jobId])
+  @@index([status])
+  @@map("escrows")
+}
+
+model EscrowEvent {
+  id          String   @id @default(uuid()) @db.Uuid
+  escrowId    String   @db.Uuid
+  type        String
+  payload     Json
+  txHash      String?
+  createdAt   DateTime @default(now())
+
+  escrow      Escrow   @relation(fields: [escrowId], references: [id], onDelete: Cascade)
+
+  @@index([escrowId, createdAt])
+  @@map("escrow_events")
+}
+
+// =====================================================================
+// Chat
+// =====================================================================
+
+model Conversation {
+  id        String   @id @default(uuid()) @db.Uuid
+  jobId     String?  @db.Uuid
+  title     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  participants ConversationParticipant[]
+  messages     Message[]
+
+  @@index([updatedAt])
+  @@map("conversations")
+}
+
+model ConversationParticipant {
+  conversationId String   @db.Uuid
+  userId         String   @db.Uuid
+  joinedAt       DateTime @default(now())
+  lastReadAt     DateTime?
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([conversationId, userId])
+  @@index([userId])
+  @@map("conversation_participants")
+}
+
+model Message {
+  id             String   @id @default(uuid()) @db.Uuid
+  conversationId String   @db.Uuid
+  senderId       String   @db.Uuid
+  jobId          String?  @db.Uuid
+  body           String
+  clientNonce    String?
+  createdAt      DateTime @default(now())
+  editedAt       DateTime?
+  deletedAt      DateTime?
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation(fields: [senderId], references: [id])
+  job            Job?         @relation(fields: [jobId], references: [id])
+
+  @@unique([conversationId, clientNonce])
+  @@index([conversationId, createdAt])
+  @@map("messages")
+}
+
+// =====================================================================
+// AI
+// =====================================================================
+
+model AIDraft {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String   @db.Uuid
+  jobId        String?  @db.Uuid
+  prompt       String
+  output       String
+  model        String
+  tokensUsed   Int
+  metadata     Json?
+  createdAt    DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job          Job?     @relation(fields: [jobId], references: [id])
+
+  @@index([userId, createdAt])
+  @@map("ai_drafts")
+}
+
+// =====================================================================
+// Audit
+// =====================================================================
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String?  @db.Uuid
+  action    String
+  entity    String
+  entityId  String?
+  metadata  Json?
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  user      User?    @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+  @@index([entity, entityId])
+  @@map("audit_logs")
+}

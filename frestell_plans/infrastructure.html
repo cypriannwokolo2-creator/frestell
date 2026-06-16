@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FreStell · Infrastructure</title>
+  <style>body{font-family:system-ui,Segoe UI,Roboto,Inter,Arial;margin:0;background:#f7fbfc;color:#0b1220} .nav{background:#fff;border-bottom:1px solid #eee;padding:8px} .nav a{color:#04656a;margin-right:12px;text-decoration:none;font-weight:600} .wrap{max-width:1100px;margin:24px auto;padding:16px} pre{background:#fff;border:1px solid #e6eef0;padding:12px;overflow:auto}</style>
+</head>
+<body>
+  <div class="nav"><div class="wrap"><a href="full-structure.html">Full Structure</a><a href="goals.html">Goals</a><a href="apps.html">Apps</a><a href="packages.html">Packages</a><a href="services.html">Services</a><a href="contracts.html">Contracts</a><a href="infrastructure.html">Infrastructure</a><a href="root.html">Root</a></div></div>
+  <div class="wrap">
+    <h1>Infrastructure — Docker, Nginx, Terraform, Monitoring, CI/CD</h1>
+    
+    <h2>infrastructure/ — Core Infrastructure as Code</h2>
+    <pre>
+infrastructure/
+  docker-compose.yml (dev environment)
+  docker-compose.prod.yml (production)
+  docker-compose.staging.yml (staging)
+  .dockerignore
+  
+  nginx/
+    nginx.conf (main config), mime.types
+    conf.d/
+      default.conf (routing rules), api.conf (API upstream), websocket.conf (WebSocket)
+    ssl/
+      params.conf (SSL/TLS parameters)
+  
+  docker/ (Dockerfile collection for services)
+    Dockerfile.api, Dockerfile.web, Dockerfile.ai, Dockerfile.payments, Dockerfile.blockchain, Dockerfile.chat
+  
+  scripts/
+    deploy-prod.sh (production), deploy-staging.sh (staging)
+    backup-db.sh (backup routine), restore-db.sh (restore), ssl-renew.sh (Let's Encrypt)
+  
+  monitoring/
+    prometheus.yml (metrics scraping), alertmanager.yml (alert routing)
+    grafana-dashboards/
+      api-overview.json, business-metrics.json, stellar-monitor.json
+  
+  terraform/ (IaC for cloud infrastructure)
+    main.tf, variables.tf, outputs.tf
+    modules/
+      vps/ — VPS setup
+      database/ — PostgreSQL/RDS
+    </pre>
+
+    <h3>Deployment & Operations</h3>
+    <pre>
+# Production deploy
+./infrastructure/scripts/deploy-prod.sh
+
+# Staging deploy
+./infrastructure/scripts/deploy-staging.sh
+
+# Database backup
+./infrastructure/scripts/backup-db.sh
+
+# Monitor
+https://monitoring.frestell.app:3000 (Grafana)
+https://prometheus.frestell.app:9090 (Prometheus)
+    </pre>
+
+    <h3>Key Decisions</h3>
+    <ul>
+      <li><b>docker-compose</b> for dev; <b>Kubernetes</b> or <b>Docker Swarm</b> for prod</li>
+      <li><b>Nginx</b> as reverse proxy & SSL terminator</li>
+      <li><b>PostgreSQL</b> + <b>Redis</b> (caching/sessions)</li>
+      <li><b>Prometheus + Grafana</b> for observability</li>
+      <li><b>Terraform</b> for repeatable cloud deployments</li>
+      <li>CORS config in nginx & API</li>
+      <li>Environment-based configs (dev, staging, prod)</li>
+    </ul>
+  </div>
+</body>
+</html>

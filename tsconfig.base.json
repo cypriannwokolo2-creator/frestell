@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@frestell/shared": ["packages/shared/src"],
+      "@frestell/shared/*": ["packages/shared/src/*"]
+    }
+  }
+}

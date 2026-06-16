@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FreStell · Services</title>
+  <style>body{font-family:system-ui,Segoe UI,Roboto,Inter,Arial;margin:0;background:#f7fbfc;color:#0b1220} .nav{background:#fff;border-bottom:1px solid #eee;padding:8px} .nav a{color:#04656a;margin-right:12px;text-decoration:none;font-weight:600} .wrap{max-width:1100px;margin:24px auto;padding:16px} pre{background:#fff;border:1px solid #e6eef0;padding:12px;overflow:auto}</style>
+</head>
+<body>
+  <div class="nav"><div class="wrap"><a href="full-structure.html">Full Structure</a><a href="goals.html">Goals</a><a href="apps.html">Apps</a><a href="packages.html">Packages</a><a href="services.html">Services</a><a href="contracts.html">Contracts</a><a href="infrastructure.html">Infrastructure</a><a href="root.html">Root</a></div></div>
+  <div class="wrap">
+    <h1>Services — Extractable Microservices</h1>
+    <p>Each service is independently deployable with its own package.json, Dockerfile, and src/ structure. All follow NestJS pattern.</p>
+
+    <h2>services/ai/ — AI/LLM Service (OpenAI, Anthropic, Local LLaMA)</h2>
+    <pre>
+services/ai/
+  package.json, tsconfig.json
+  Dockerfile
+  
+  src/
+    index.ts, ai.service.ts, ai.controller.ts, ai.module.ts
+    ai-adapter.interface.ts, proposal-coach.service.ts, prompt-templates.ts
+    
+    providers/
+      openai.provider.ts, anthropic.provider.ts, local-llama.provider.ts, mock.provider.ts
+    
+    dto/
+      generate-proposal.dto.ts, summarize.dto.ts
+    </pre>
+
+    <h2>services/payments/ — Payments Service (Escrow, Deposits, Withdrawals)</h2>
+    <pre>
+services/payments/
+  package.json, tsconfig.json
+  Dockerfile
+  
+  src/
+    index.ts, payments.service.ts, payments.controller.ts, payments.module.ts
+    stellar-payment.provider.ts, fiat-payment.provider.ts
+    escrow-manager.service.ts
+    
+    dto/
+      deposit.dto.ts, withdraw.dto.ts
+    </pre>
+
+    <h2>services/blockchain/ — Blockchain Service (Stellar, Soroban, Key Mgmt)</h2>
+    <pre>
+services/blockchain/
+  package.json, tsconfig.json
+  Dockerfile
+  
+  src/
+    index.ts, blockchain.service.ts, blockchain.module.ts
+    stellar.provider.ts, soroban.provider.ts
+    key-manager.service.ts, transaction-monitor.service.ts
+    
+    contracts/
+      escrow.interface.ts, dispute.interface.ts
+    </pre>
+
+    <h2>services/chat/ — Chat Service (WebSocket, Presence, Message Store)</h2>
+    <pre>
+services/chat/
+  package.json, tsconfig.json
+  Dockerfile
+  
+  src/
+    index.ts, chat.service.ts, chat.gateway.ts, chat.module.ts
+    message-store.service.ts, presence.service.ts
+    </pre>
+  </div>
+  payments/
+    src/
+      payments.service.ts
+      providers/
+  blockchain/
+    src/
+      key-manager.service.ts
+      soroban/provider.ts
+  chat/
+    src/
+      chat.gateway.ts
+  each service: package.json, Dockerfile, tsconfig.json
+    </pre>
+
+    <p>Notes:</p>
+    <ul>
+      <li>Keep published interfaces small and well-documented.</li>
+      <li>CI: build and test each service independently; publish Docker images with semantic tags.</li>
+      <li>At scale, map each service to its own host/container orchestration unit (ECS, Kubernetes, Cloud Run).</li>
+    </ul>
+  </div>
+</body>
+</html>

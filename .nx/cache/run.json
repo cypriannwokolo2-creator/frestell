@@ -1,0 +1,98 @@
+{
+  "run": {
+    "command": "nx run-many --target=lint --all",
+    "startTime": "2026-06-16T06:29:46.607Z",
+    "endTime": "2026-06-16T06:29:51.271Z",
+    "inner": false
+  },
+  "tasks": [
+    {
+      "taskId": "shared:lint",
+      "target": "lint",
+      "projectName": "shared",
+      "hash": "2050887948137625434",
+      "startTime": "2026-06-16T06:29:46.668Z",
+      "endTime": "2026-06-16T06:29:48.234Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 1
+    },
+    {
+      "taskId": "payments:lint",
+      "target": "lint",
+      "projectName": "payments",
+      "hash": "6988278223487102012",
+      "startTime": "2026-06-16T06:29:46.688Z",
+      "endTime": "2026-06-16T06:29:48.247Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 1
+    },
+    {
+      "taskId": "auth:lint",
+      "target": "lint",
+      "projectName": "auth",
+      "hash": "17811005571035518819",
+      "startTime": "2026-06-16T06:29:46.709Z",
+      "endTime": "2026-06-16T06:29:48.291Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 1
+    },
+    {
+      "taskId": "jobs:lint",
+      "target": "lint",
+      "projectName": "jobs",
+      "hash": "16870886520516270333",
+      "startTime": "2026-06-16T06:29:48.247Z",
+      "endTime": "2026-06-16T06:29:49.810Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 1
+    },
+    {
+      "taskId": "chat:lint",
+      "target": "lint",
+      "projectName": "chat",
+      "hash": "947322921476721665",
+      "startTime": "2026-06-16T06:29:48.235Z",
+      "endTime": "2026-06-16T06:29:49.824Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 1
+    },
+    {
+      "taskId": "api:lint",
+      "target": "lint",
+      "projectName": "api",
+      "hash": "8676327376657270572",
+      "startTime": "2026-06-16T06:29:48.291Z",
+      "endTime": "2026-06-16T06:29:49.890Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 1
+    },
+    {
+      "taskId": "web:lint",
+      "target": "lint",
+      "projectName": "web",
+      "hash": "8537965018546687962",
+      "startTime": "2026-06-16T06:29:49.811Z",
+      "endTime": "2026-06-16T06:29:51.234Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 1
+    },
+    {
+      "taskId": "ai:lint",
+      "target": "lint",
+      "projectName": "ai",
+      "hash": "17967562282707264974",
+      "startTime": "2026-06-16T06:29:49.825Z",
+      "endTime": "2026-06-16T06:29:51.270Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 1
+    }
+  ]
+}

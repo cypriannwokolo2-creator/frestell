@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FreStell · Contracts (Soroban)</title>
+  <style>body{font-family:system-ui,Segoe UI,Roboto,Inter,Arial;margin:0;background:#f7fbfc;color:#0b1220} .nav{background:#fff;border-bottom:1px solid #eee;padding:8px} .nav a{color:#04656a;margin-right:12px;text-decoration:none;font-weight:600} .wrap{max-width:1100px;margin:24px auto;padding:16px} pre{background:#fff;border:1px solid #e6eef0;padding:12px;overflow:auto}</style>
+</head>
+<body>
+  <div class="nav"><div class="wrap"><a href="full-structure.html">Full Structure</a><a href="goals.html">Goals</a><a href="apps.html">Apps</a><a href="packages.html">Packages</a><a href="services.html">Services</a><a href="contracts.html">Contracts</a><a href="infrastructure.html">Infrastructure</a><a href="root.html">Root</a></div></div>
+  <div class="wrap">
+    <h1>Contracts — Rust / Soroban Smart Contracts</h1>
+    <p>Contains Soroban contracts for escrow, disputes, and token operations. All are Rust-based, built with cargo and deployed to Stellar testnet/mainnet.</p>
+
+    <h2>Workspace Root</h2>
+    <pre>
+contracts/
+  Cargo.toml (workspace manifest)
+  Cargo.lock
+  rust-toolchain.toml
+  Makefile
+  README.md
+  .gitignore
+    </pre>
+
+    <h2>contracts/escrow/ — Escrow Contract (Hold Funds, Release on Milestone)</h2>
+    <pre>
+contracts/escrow/
+  Cargo.toml, Cargo.lock, rust-toolchain.toml
+  Makefile, README.md
+  
+  src/
+    lib.rs (contract entry point)
+    contract.rs (main escrow logic)
+    storage.rs (Soroban storage map definitions)
+    errors.rs (contract error codes)
+    events.rs (contract event emissions)
+    types.rs (data structures)
+    auth.rs (authorization logic)
+    interface.rs (contract interface)
+    admin.rs (admin functions)
+  
+  tests/
+    test.rs, integration_test.rs
+    common/
+      mod.rs, setup.rs, fixtures.rs
+  
+  scripts/
+    deploy.sh, deploy_testnet.sh, deploy_mainnet.sh
+    initialize.sh, upgrade.sh, verify.sh, invoke.ts
+  
+  bindings/ (Generated TypeScript bindings from contract)
+    escrow.ts, types.ts, errors.ts
+  
+  optimizations/
+    wasm-opt.sh, size-report.txt
+    </pre>
+
+    <h2>contracts/dispute/ — Dispute Resolution Contract (Voting, Arbitration)</h2>
+    <pre>
+contracts/dispute/
+  Cargo.toml, Cargo.lock
+  Makefile, README.md
+  
+  src/
+    lib.rs, contract.rs, storage.rs
+    errors.rs, types.rs, voting.rs
+  
+  tests/
+    test.rs, dispute_scenarios.rs
+  
+  scripts/
+    deploy.sh, init_dispute.sh
+  
+  bindings/
+    dispute.ts
+    </pre>
+
+    <h2>contracts/token/ — Token Contract (Mint, Transfer, Allowance)</h2>
+    <pre>
+contracts/token/
+  Cargo.toml
+  Makefile, README.md
+  
+  src/
+    lib.rs, contract.rs, storage.rs
+    errors.rs, metadata.rs, allowance.rs
+  
+  tests/
+    test.rs
+  
+  scripts/
+    deploy.sh
+  
+  bindings/
+    token.ts
+    </pre>
+
+    <h2>contracts/shared/ — Shared Contract Utilities (Types, Auth, Math)</h2>
+    <pre>
+contracts/shared/
+  Cargo.toml
+  
+  src/
+    lib.rs, types.rs, errors.rs, auth.rs, math.rs, events.rs
+    </pre>
+
+    <h3>CI/CD for Contracts</h3>
+    <p>In your `.github/workflows/`, ensure you have:</p>
+    <pre>
+.github/workflows/
+  ci-contracts.yml
+    - on: pull_request path filter (contracts/**)
+    - cargo test, cargo build --target wasm32-unknown-unknown
+    - cargo clippy, cargo fmt check
+    - WASM size reporting
+    </pre>
+  </div>
+      contract.rs
+    scripts/
+  dispute/
+  token/
+  shared/
+  workspace-level Cargo.toml
+    </pre>
+
+    <h3>CI notes</h3>
+    <ul>
+      <li>Install Rust toolchain + target wasm32-unknown-unknown</li>
+      <li>Run cargo test and wasm-opt size checks</li>
+      <li>Generate bindings for JS (bindings/ folder) consumed by backend</li>
+    </ul>
+  </div>
+</body>
+</html>

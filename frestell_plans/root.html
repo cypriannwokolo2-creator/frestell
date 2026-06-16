@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FreStell · Root</title>
+  <style>body{font-family:system-ui,Segoe UI,Roboto,Inter,Arial;margin:0;background:#f7fbfc;color:#0b1220} .nav{background:#fff;border-bottom:1px solid #eee;padding:8px} .nav a{color:#04656a;margin-right:12px;text-decoration:none;font-weight:600} .wrap{max-width:1100px;margin:24px auto;padding:16px} pre{background:#fff;border:1px solid #e6eef0;padding:12px;overflow:auto}</style>
+</head>
+<body>
+  <div class="nav"><div class="wrap"><a href="full-structure.html">Full Structure</a><a href="goals.html">Goals</a><a href="apps.html">Apps</a><a href="packages.html">Packages</a><a href="services.html">Services</a><a href="contracts.html">Contracts</a><a href="infrastructure.html">Infrastructure</a><a href="root.html">Root</a></div></div>
+  <div class="wrap">
+    <h1>Root Configuration — CI/CD, Nx Workspace, Tooling</h1>
+    
+    <h2>Root Directory Files & Folders</h2>
+    <pre>
+frestell/  (monorepo root)
+  
+  .github/
+    workflows/
+      ci.yml (test, lint all apps/packages/services/contracts)
+      deploy-staging.yml (auto-deploy to staging on main)
+      deploy-prod.yml (manual deploy with approval)
+      codeql.yml (security scanning)
+      e2e.yml (end-to-end tests)
+    dependabot.yml (auto dependency updates)
+    CODEOWNERS (code ownership for PR routing)
+    pull_request_template.md (PR template)
+  
+  .husky/ (git hooks)
+    pre-commit (lint-staged, format check)
+    commit-msg (commitlint enforcement)
+    pre-push (run tests before push)
+  
+  .gitignore, .eslintrc.js, .prettierrc, .prettierignore
+  .commitlintrc.json (commit message linting)
+  .editorconfig (editor settings)
+  .nvmrc (Node version lock)
+  .env.example (environment template)
+  
+  nx.json (Nx workspace configuration)
+  workspace.json (or project.json — Nx projects list)
+  tsconfig.base.json (base TypeScript config)
+  
+  package.json (root dependencies, scripts, monorepo setup)
+  package-lock.json
+  
+  README.md (getting started, monorepo overview)
+  LICENSE (project license)
+  Makefile (common commands: make build, make test, make deploy)
+  SECURITY.md (security policy)
+  CONTRIBUTING.md (contribution guidelines)
+  CHANGELOG.md (release notes)
+    </pre>
+
+    <h3>Nx Workspace Setup Example</h3>
+    <pre>
+# nx.json
+{
+  "version": 2,
+  "projects": {
+    "web": { "root": "apps/web", "projectType": "application" },
+    "api": { "root": "apps/api", "projectType": "application" },
+    "shared": { "root": "packages/shared", "projectType": "library" },
+    "ai": { "root": "services/ai", "projectType": "application" },
+    "contracts": { "root": "contracts", "projectType": "application" }
+  },
+  "defaultBase": "main",
+  "defaultRelease": false
+}
+    </pre>
+
+    <h3>CI/CD Pipeline</h3>
+    <pre>
+# On every PR
+ci.yml →
+  - Install dependencies
+  - Lint (eslint, prettier)
+  - Type-check (tsc, rust clippy)
+  - Test (Jest, vitest, cargo test)
+  - Build (next build, nest build, cargo build)
+  - Security scan (CodeQL)
+
+# On merge to main
+deploy-staging.yml →
+  - Build Docker images (all services)
+  - Push to staging registry
+  - Deploy to staging environment
+  - Run smoke tests
+
+# Manual trigger for production
+deploy-prod.yml →
+  - (same build + push steps)
+  - Manual approval gate
+  - Deploy to prod
+  - Health checks
+    </pre>
+
+    <h3>Root package.json Scripts Example</h3>
+    <pre>
+{
+  "scripts": {
+    "dev": "nx run-many --target=serve --projects=web,api",
+    "build": "nx run-many --target=build --projects=web,api",
+    "test": "nx run-many --target=test",
+    "lint": "nx run-many --target=lint",
+    "format": "prettier --write .",
+    "affected": "nx affected --targets=test,lint,build",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "deploy:staging": "./infrastructure/scripts/deploy-staging.sh",
+    "deploy:prod": "./infrastructure/scripts/deploy-prod.sh"
+  }
+}
+    </pre>
+
+    <h3>Environment Setup</h3>
+    <pre>
+.env.example → Copy to .env.local or .env for local development
+
+Key variables:
+  DATABASE_URL=postgresql://user:pass@localhost:5432/frestell
+  REDIS_URL=redis://localhost:6379
+  JWT_SECRET=your_secret_here
+  STELLAR_NETWORK=testnet or mainnet
+  OPENAI_API_KEY=your_api_key
+  SENDGRID_API_KEY=your_sendgrid_key
+    </pre>
+
+    <h3>Best Practices</h3>
+    <ul>
+      <li>Every commit must pass linting & tests (enforced by pre-commit hooks)</li>
+      <li>Use conventional commits (feat:, fix:, docs:, refactor:, test:, chore:)</li>
+      <li>PR must be approved before merge (CODEOWNERS enforcement)</li>
+      <li>Automated deployments to staging; manual approval for prod</li>
+      <li>Keep `.env.example` updated when adding new secrets/config</li>
+      <li>Document all setup steps in README.md and CONTRIBUTING.md</li>
+    </ul>
+  </div>
+</body>
+</html>
